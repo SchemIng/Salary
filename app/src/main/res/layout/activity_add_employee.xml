@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:stretchColumns="1">
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin">
+
+        <TextView
+            style="@style/AppTheme.NormalText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/add_employee_name_string" />
+
+        <EditText
+            android:id="@+id/add_employee_name_edit"
+            style="@style/AppTheme.EditText"
+            android:layout_width="match_parent"
+            android:inputType="text"
+            android:lines="1" />
+    </TableRow>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/gray" />
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin">
+
+        <TextView
+            style="@style/AppTheme.NormalText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/add_employee_join_date_string" />
+
+        <TextView
+            android:id="@+id/add_employee_join_date_text"
+            style="@style/AppTheme.EditText"
+            android:layout_width="match_parent"
+            android:gravity="center_vertical"
+            android:hint="@string/add_employee_join_date_input_string"
+            android:lines="1" />
+    </TableRow>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/gray" />
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin">
+
+        <TextView
+            style="@style/AppTheme.NormalText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/add_employee_base_salary_string" />
+
+        <EditText
+            android:id="@+id/add_employee_base_salary_edit"
+            style="@style/AppTheme.EditText"
+            android:layout_width="match_parent"
+            android:inputType="number"
+            android:lines="1" />
+    </TableRow>
+
+</TableLayout>
