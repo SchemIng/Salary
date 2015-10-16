@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingTop="@dimen/activity_vertical_margin">
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:stretchColumns="1">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin">
+
+            <TextView
+                style="@style/AppTheme.NormalText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/salary_borrow_string" />
+
+            <EditText
+                android:id="@+id/salary_borrow_edit"
+                style="@style/AppTheme.EditText"
+                android:layout_width="match_parent"
+                android:inputType="text"
+                android:lines="1" />
+        </TableRow>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/gray" />
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin">
+
+            <TextView
+                style="@style/AppTheme.NormalText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/salary_cut_payment_string" />
+
+            <EditText
+                android:id="@+id/salary_cut_payment_edit"
+                style="@style/AppTheme.EditText"
+                android:layout_width="match_parent"
+                android:gravity="center_vertical"
+                android:inputType="number"
+                android:lines="1" />
+        </TableRow>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/gray" />
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin">
+
+            <TextView
+                style="@style/AppTheme.NormalText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/salary_social_security_string" />
+
+            <EditText
+                android:id="@+id/salary_social_security_edit"
+                style="@style/AppTheme.EditText"
+                android:layout_width="match_parent"
+                android:gravity="center_vertical"
+                android:inputType="number"
+                android:lines="1" />
+        </TableRow>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/gray" />
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin">
+
+            <TextView
+                style="@style/AppTheme.NormalText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/salary_accident_insurance_string" />
+
+            <EditText
+                android:id="@+id/salary_accident_insurance_edit"
+                style="@style/AppTheme.EditText"
+                android:layout_width="match_parent"
+                android:gravity="center_vertical"
+                android:inputType="number"
+                android:lines="1" />
+        </TableRow>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/gray" />
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin">
+
+            <TextView
+                style="@style/AppTheme.NormalText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/salary_life_allowance_string" />
+
+            <EditText
+                android:id="@+id/salary_life_allowance_edit"
+                style="@style/AppTheme.EditText"
+                android:layout_width="match_parent"
+                android:gravity="center_vertical"
+                android:inputType="number"
+                android:lines="1" />
+        </TableRow>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/gray" />
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin">
+
+            <TextView
+                style="@style/AppTheme.NormalText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/salary_other_string" />
+
+            <EditText
+                android:id="@+id/salary_other_edit"
+                style="@style/AppTheme.EditText"
+                android:layout_width="match_parent"
+                android:gravity="center_vertical"
+                android:inputType="number"
+                android:lines="1" />
+        </TableRow>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/gray" />
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin">
+
+            <TextView
+                style="@style/AppTheme.NormalText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/salary_special_string" />
+
+            <EditText
+                android:id="@+id/salary_special_edit"
+                style="@style/AppTheme.EditText"
+                android:layout_width="match_parent"
+                android:gravity="center_vertical"
+                android:inputType="number"
+                android:lines="1" />
+        </TableRow>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/gray" />
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin">
+
+            <TextView
+                style="@style/AppTheme.NormalText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/salary_post_string" />
+
+            <EditText
+                android:id="@+id/salary_post_edit"
+                style="@style/AppTheme.EditText"
+                android:layout_width="match_parent"
+                android:gravity="center_vertical"
+                android:inputType="number"
+                android:lines="1" />
+        </TableRow>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/gray" />
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin">
+
+            <TextView
+                style="@style/AppTheme.NormalText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/salary_personal_security_string" />
+
+            <EditText
+                android:id="@+id/salary_personal_security_edit"
+                style="@style/AppTheme.EditText"
+                android:layout_width="match_parent"
+                android:inputType="number"
+                android:lines="1" />
+        </TableRow>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/gray" />
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin">
+
+            <TextView
+                style="@style/AppTheme.NormalText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/salary_sale_string" />
+
+            <TextView
+                android:id="@+id/salary_sale_edit"
+                style="@style/AppTheme.EditText"
+                android:layout_width="match_parent"
+                android:gravity="center_vertical"
+                android:hint="@string/salary_click_input_string"
+                android:lines="1" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin">
+
+            <TextView
+                style="@style/AppTheme.NormalText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/salary_progress_string" />
+
+            <TextView
+                android:id="@+id/salary_progress_edit"
+                style="@style/AppTheme.EditText"
+                android:layout_width="match_parent"
+                android:gravity="center_vertical"
+                android:hint="@string/salary_click_input_string"
+                android:lines="1" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin">
+
+            <TextView
+                style="@style/AppTheme.NormalText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/salary_service_string" />
+
+            <TextView
+                android:id="@+id/salary_service_edit"
+                style="@style/AppTheme.EditText"
+                android:layout_width="match_parent"
+                android:gravity="center_vertical"
+                android:hint="@string/salary_click_input_string"
+                android:lines="1" />
+        </TableRow>
+    </TableLayout>
+</ScrollView>

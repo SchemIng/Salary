@@ -56,7 +56,7 @@ public class MyDaoGenerator {
         allowance.addIdProperty().autoincrement();
         allowance.addFloatProperty("social_security");
         allowance.addFloatProperty("accident_insurance");
-        allowance.addFloatProperty("live_allowance");
+        allowance.addFloatProperty("life_allowance");
         allowance.addFloatProperty("other");
         allowance.addFloatProperty("special");
         allowance.addFloatProperty("post");

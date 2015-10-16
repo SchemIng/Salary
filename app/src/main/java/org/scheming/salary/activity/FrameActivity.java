@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import org.scheming.salary.R;
 import org.scheming.salary.SalaryApplication;
@@ -21,14 +22,13 @@ import java.util.List;
 import butterknife.Bind;
 import de.greenrobot.dao.query.QueryBuilder;
 
-public class FrameActivity extends BaseActivity {
+public class FrameActivity extends BaseActivity implements FrameRecyclerAdapter.ItemClickListener {
     public static final int UPDATE_USER = 1;
 
     @Bind(R.id.frame_recycler)
     RecyclerView mUserRecyclerV;
 
     private List<User> users;
-    private DaoSession daoSession;
     private QueryBuilder mUserDaoBuilder;
     private FrameRecyclerAdapter mAdapter;
 
@@ -38,13 +38,13 @@ public class FrameActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_frame);
 
-        daoSession = SalaryApplication.getApplication().getSession();
-        mUserDaoBuilder = daoSession.getUserDao().queryBuilder();
+        mUserDaoBuilder = SalaryApplication.getApplication().getSession().getUserDao().queryBuilder();
         users = mUserDaoBuilder.list();
 
         mAdapter = new FrameRecyclerAdapter(users);
         mUserRecyclerV.setAdapter(mAdapter);
         mUserRecyclerV.setLayoutManager(new LinearLayoutManager(this));
+        mAdapter.setOnItemClickListener(this);
     }
 
     @Override
@@ -73,5 +73,12 @@ public class FrameActivity extends BaseActivity {
                     break;
             }
         }
+    }
+
+    @Override
+    public void onItemClickListener(View view, int position) {
+        Intent intent = new Intent(this, MonthsActivity.class);
+        intent.putExtra("name", users.get(position).getName());
+        startActivity(intent);
     }
 }

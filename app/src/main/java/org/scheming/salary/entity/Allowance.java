@@ -15,7 +15,7 @@ public class Allowance {
     private Long id;
     private Float social_security;
     private Float accident_insurance;
-    private Float live_allowance;
+    private Float life_allowance;
     private Float other;
     private Float special;
     private Float post;
@@ -38,11 +38,11 @@ public class Allowance {
         this.id = id;
     }
 
-    public Allowance(Long id, Float social_security, Float accident_insurance, Float live_allowance, Float other, Float special, Float post, Long salary_item) {
+    public Allowance(Long id, Float social_security, Float accident_insurance, Float life_allowance, Float other, Float special, Float post, Long salary_item) {
         this.id = id;
         this.social_security = social_security;
         this.accident_insurance = accident_insurance;
-        this.live_allowance = live_allowance;
+        this.life_allowance = life_allowance;
         this.other = other;
         this.special = special;
         this.post = post;
@@ -79,12 +79,12 @@ public class Allowance {
         this.accident_insurance = accident_insurance;
     }
 
-    public Float getLive_allowance() {
-        return live_allowance;
+    public Float getLife_allowance() {
+        return life_allowance;
     }
 
-    public void setLive_allowance(Float live_allowance) {
-        this.live_allowance = live_allowance;
+    public void setLife_allowance(Float life_allowance) {
+        this.life_allowance = life_allowance;
     }
 
     public Float getOther() {

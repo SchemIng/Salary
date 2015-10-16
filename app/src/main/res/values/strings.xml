@@ -5,10 +5,20 @@
     <string name="add_employee_base_salary_string">基本工资</string>
     <string name="add_employee_date_string">入职时间</string>
     <string name="wait_input">请输入…</string>
-    <string name="add_employee_borrow_string">借支</string>
-    <string name="add_employee_cut_payment_string">扣款</string>
-    <string name="add_employee_personal_security_string">个人社保</string>
+    <string name="salary_borrow_string">借支</string>
+    <string name="salary_cut_payment_string">扣款</string>
+    <string name="salary_personal_security_string">个人社保</string>
     <string name="add_employee_join_date_string">入职时间</string>
     <string name="add_employee_join_date_input_string">点击选择日期</string>
     <string name="menu__add_employee_done">完成</string>
+    <string name="salary_sale_string">销售提成</string>
+    <string name="salary_click_input_string">点击输入</string>
+    <string name="salary_service_string">服务提成</string>
+    <string name="salary_progress_string">实施提成</string>
+    <string name="salary_social_security_string">社保</string>
+    <string name="salary_accident_insurance_string">意外保险</string>
+    <string name="salary_life_allowance_string">生活补助</string>
+    <string name="salary_other_string">其他</string>
+    <string name="salary_special_string">特殊岗位</string>
+    <string name="salary_post_string">岗位</string>
 </resources>

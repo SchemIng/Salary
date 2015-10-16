@@ -7,24 +7,23 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import org.scheming.salary.R;
-import org.scheming.salary.entity.User;
+import org.scheming.salary.entity.SalaryItem;
 
 import java.util.List;
 
 /**
- * Created by Scheming on 2015/5/29.
+ * Created by Scheming on 2015/10/15.
  */
-public class FrameRecyclerAdapter extends RecyclerView.Adapter<FrameRecyclerAdapter.ViewHolder> {
-
-    private List<User> datas = null;
+public class MonthsRecyclerAdapter extends RecyclerView.Adapter<MonthsRecyclerAdapter.ViewHolder> {
+    private List<SalaryItem> datas = null;
     private ItemClickListener clickListener = null;
-    private ItemLongClickListener longClickListener = null;
+    private FrameRecyclerAdapter.ItemLongClickListener longClickListener = null;
 
-    public FrameRecyclerAdapter(List<User> datas) {
+    public MonthsRecyclerAdapter(List<SalaryItem> datas) {
         this.datas = datas;
     }
 
-    public void setDatas(List<User> datas) {
+    public void setDatas(List<SalaryItem> datas) {
         this.datas = datas;
     }
 
@@ -36,7 +35,7 @@ public class FrameRecyclerAdapter extends RecyclerView.Adapter<FrameRecyclerAdap
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.nameTV.setText(datas.get(position).getName());
+        holder.nameTV.setText(datas.get(position).getCurrent_month());
     }
 
     @Override
@@ -47,31 +46,19 @@ public class FrameRecyclerAdapter extends RecyclerView.Adapter<FrameRecyclerAdap
     public void setOnItemClickListener(ItemClickListener listener) {
         this.clickListener = listener;
     }
-
-    public void setOnItemLongClickListener(ItemLongClickListener longClickListener) {
-        this.longClickListener = longClickListener;
-    }
-
     public interface ItemClickListener {
         void onItemClickListener(View view, int position);
-    }
-
-    public interface ItemLongClickListener {
-        void OnItemLongClickListener(View view, int position);
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView nameTV = null;
         private ItemClickListener clickListener = null;
-//        private ItemLongClickListener longClickListener = null;
 
         public ViewHolder(View itemView, ItemClickListener clickListener) {
             super(itemView);
             nameTV = (TextView) itemView.findViewById(R.id.item_user_name);
             this.clickListener = clickListener;
-//            this.longClickListener = longClickListener;
             itemView.setOnClickListener(this);
-//            itemView.setOnLongClickListener(this);
         }
 
         @Override
@@ -80,11 +67,5 @@ public class FrameRecyclerAdapter extends RecyclerView.Adapter<FrameRecyclerAdap
                 clickListener.onItemClickListener(v, getAdapterPosition());
         }
 
-//        @Override
-//        public boolean onLongClick(View v) {
-//            if (longClickListener != null)
-//                longClickListener.OnItemLongClickListener(v, getAdapterPosition());
-//            return false;
-//        }
     }
 }

@@ -31,7 +31,7 @@ public class AllowanceDao extends AbstractDao<Allowance, Long> {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property Social_security = new Property(1, Float.class, "social_security", false, "SOCIAL_SECURITY");
         public final static Property Accident_insurance = new Property(2, Float.class, "accident_insurance", false, "ACCIDENT_INSURANCE");
-        public final static Property Live_allowance = new Property(3, Float.class, "live_allowance", false, "LIVE_ALLOWANCE");
+        public final static Property Life_allowance = new Property(3, Float.class, "life_allowance", false, "LIFE_ALLOWANCE");
         public final static Property Other = new Property(4, Float.class, "other", false, "OTHER");
         public final static Property Special = new Property(5, Float.class, "special", false, "SPECIAL");
         public final static Property Post = new Property(6, Float.class, "post", false, "POST");
@@ -57,7 +57,7 @@ public class AllowanceDao extends AbstractDao<Allowance, Long> {
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
                 "\"SOCIAL_SECURITY\" REAL," + // 1: social_security
                 "\"ACCIDENT_INSURANCE\" REAL," + // 2: accident_insurance
-                "\"LIVE_ALLOWANCE\" REAL," + // 3: live_allowance
+                "\"LIFE_ALLOWANCE\" REAL," + // 3: life_allowance
                 "\"OTHER\" REAL," + // 4: other
                 "\"SPECIAL\" REAL," + // 5: special
                 "\"POST\" REAL," + // 6: post
@@ -90,9 +90,9 @@ public class AllowanceDao extends AbstractDao<Allowance, Long> {
             stmt.bindDouble(3, accident_insurance);
         }
  
-        Float live_allowance = entity.getLive_allowance();
-        if (live_allowance != null) {
-            stmt.bindDouble(4, live_allowance);
+        Float life_allowance = entity.getLife_allowance();
+        if (life_allowance != null) {
+            stmt.bindDouble(4, life_allowance);
         }
  
         Float other = entity.getOther();
@@ -135,7 +135,7 @@ public class AllowanceDao extends AbstractDao<Allowance, Long> {
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.isNull(offset + 1) ? null : cursor.getFloat(offset + 1), // social_security
             cursor.isNull(offset + 2) ? null : cursor.getFloat(offset + 2), // accident_insurance
-            cursor.isNull(offset + 3) ? null : cursor.getFloat(offset + 3), // live_allowance
+            cursor.isNull(offset + 3) ? null : cursor.getFloat(offset + 3), // life_allowance
             cursor.isNull(offset + 4) ? null : cursor.getFloat(offset + 4), // other
             cursor.isNull(offset + 5) ? null : cursor.getFloat(offset + 5), // special
             cursor.isNull(offset + 6) ? null : cursor.getFloat(offset + 6), // post
@@ -150,7 +150,7 @@ public class AllowanceDao extends AbstractDao<Allowance, Long> {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setSocial_security(cursor.isNull(offset + 1) ? null : cursor.getFloat(offset + 1));
         entity.setAccident_insurance(cursor.isNull(offset + 2) ? null : cursor.getFloat(offset + 2));
-        entity.setLive_allowance(cursor.isNull(offset + 3) ? null : cursor.getFloat(offset + 3));
+        entity.setLife_allowance(cursor.isNull(offset + 3) ? null : cursor.getFloat(offset + 3));
         entity.setOther(cursor.isNull(offset + 4) ? null : cursor.getFloat(offset + 4));
         entity.setSpecial(cursor.isNull(offset + 5) ? null : cursor.getFloat(offset + 5));
         entity.setPost(cursor.isNull(offset + 6) ? null : cursor.getFloat(offset + 6));
