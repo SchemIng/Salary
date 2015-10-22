@@ -2,10 +2,8 @@ package org.scheming.salary.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,7 +11,7 @@ import android.view.View;
 import org.scheming.salary.R;
 import org.scheming.salary.SalaryApplication;
 import org.scheming.salary.adapter.FrameRecyclerAdapter;
-import org.scheming.salary.dao.DaoSession;
+import org.scheming.salary.dao.UserDao;
 import org.scheming.salary.entity.User;
 import org.scheming.salary.utils.Message;
 
@@ -56,13 +54,12 @@ public class FrameActivity extends BaseActivity implements FrameRecyclerAdapter.
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_frame_add) {
-            Intent intent = new Intent(this, AddEmployeeActivity.class);
+            Intent intent = new Intent(this, EmployeeActivity.class);
             startActivity(intent);
         }
         return true;
     }
 
-    @Override
     public void onEvent(Message msg) {
         if (msg.clazz.equals(getClass())) {
             switch (msg.what) {
@@ -78,7 +75,8 @@ public class FrameActivity extends BaseActivity implements FrameRecyclerAdapter.
     @Override
     public void onItemClickListener(View view, int position) {
         Intent intent = new Intent(this, MonthsActivity.class);
-        intent.putExtra("name", users.get(position).getName());
+        intent.putExtra(UserDao.Properties.Name.name, users.get(position).getName());
+        intent.putExtra(UserDao.Properties.Id.name, users.get(position).getId());
         startActivity(intent);
     }
 }

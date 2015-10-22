@@ -10,13 +10,13 @@ import de.greenrobot.dao.identityscope.IdentityScopeType;
 import de.greenrobot.dao.internal.DaoConfig;
 
 import org.scheming.salary.entity.User;
-import org.scheming.salary.entity.SalaryItem;
+import org.scheming.salary.entity.Salary;
 import org.scheming.salary.entity.Project;
 import org.scheming.salary.entity.Allowance;
 import org.scheming.salary.entity.Attendance;
 
 import org.scheming.salary.dao.UserDao;
-import org.scheming.salary.dao.SalaryItemDao;
+import org.scheming.salary.dao.SalaryDao;
 import org.scheming.salary.dao.ProjectDao;
 import org.scheming.salary.dao.AllowanceDao;
 import org.scheming.salary.dao.AttendanceDao;
@@ -31,13 +31,13 @@ import org.scheming.salary.dao.AttendanceDao;
 public class DaoSession extends AbstractDaoSession {
 
     private final DaoConfig userDaoConfig;
-    private final DaoConfig salaryItemDaoConfig;
+    private final DaoConfig salaryDaoConfig;
     private final DaoConfig projectDaoConfig;
     private final DaoConfig allowanceDaoConfig;
     private final DaoConfig attendanceDaoConfig;
 
     private final UserDao userDao;
-    private final SalaryItemDao salaryItemDao;
+    private final SalaryDao salaryDao;
     private final ProjectDao projectDao;
     private final AllowanceDao allowanceDao;
     private final AttendanceDao attendanceDao;
@@ -49,8 +49,8 @@ public class DaoSession extends AbstractDaoSession {
         userDaoConfig = daoConfigMap.get(UserDao.class).clone();
         userDaoConfig.initIdentityScope(type);
 
-        salaryItemDaoConfig = daoConfigMap.get(SalaryItemDao.class).clone();
-        salaryItemDaoConfig.initIdentityScope(type);
+        salaryDaoConfig = daoConfigMap.get(SalaryDao.class).clone();
+        salaryDaoConfig.initIdentityScope(type);
 
         projectDaoConfig = daoConfigMap.get(ProjectDao.class).clone();
         projectDaoConfig.initIdentityScope(type);
@@ -62,13 +62,13 @@ public class DaoSession extends AbstractDaoSession {
         attendanceDaoConfig.initIdentityScope(type);
 
         userDao = new UserDao(userDaoConfig, this);
-        salaryItemDao = new SalaryItemDao(salaryItemDaoConfig, this);
+        salaryDao = new SalaryDao(salaryDaoConfig, this);
         projectDao = new ProjectDao(projectDaoConfig, this);
         allowanceDao = new AllowanceDao(allowanceDaoConfig, this);
         attendanceDao = new AttendanceDao(attendanceDaoConfig, this);
 
         registerDao(User.class, userDao);
-        registerDao(SalaryItem.class, salaryItemDao);
+        registerDao(Salary.class, salaryDao);
         registerDao(Project.class, projectDao);
         registerDao(Allowance.class, allowanceDao);
         registerDao(Attendance.class, attendanceDao);
@@ -76,7 +76,7 @@ public class DaoSession extends AbstractDaoSession {
     
     public void clear() {
         userDaoConfig.getIdentityScope().clear();
-        salaryItemDaoConfig.getIdentityScope().clear();
+        salaryDaoConfig.getIdentityScope().clear();
         projectDaoConfig.getIdentityScope().clear();
         allowanceDaoConfig.getIdentityScope().clear();
         attendanceDaoConfig.getIdentityScope().clear();
@@ -86,8 +86,8 @@ public class DaoSession extends AbstractDaoSession {
         return userDao;
     }
 
-    public SalaryItemDao getSalaryItemDao() {
-        return salaryItemDao;
+    public SalaryDao getSalaryDao() {
+        return salaryDao;
     }
 
     public ProjectDao getProjectDao() {

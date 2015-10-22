@@ -2,6 +2,8 @@ package org.scheming.salary.activity;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
+import android.support.v7.widget.AppCompatEditText;
+import android.support.v7.widget.AppCompatTextView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -25,17 +27,17 @@ import java.util.Date;
 import butterknife.Bind;
 import de.greenrobot.event.EventBus;
 
-public class AddEmployeeActivity extends BaseActivity implements View.OnClickListener {
+public class EmployeeActivity extends BaseActivity implements View.OnClickListener {
     private Date mJoinDate;
 
     @Bind(R.id.add_employee_name_edit)
-    EditText mNameET;
+    AppCompatEditText mNameET;
 
     @Bind(R.id.add_employee_base_salary_edit)
-    EditText mBaseSalaryET;
+    AppCompatEditText mBaseSalaryET;
 
     @Bind(R.id.add_employee_join_date_text)
-    TextView mJoinDateTV;
+    AppCompatTextView mJoinDateTV;
 
     private DaoSession mDaoSession;
 
@@ -107,7 +109,16 @@ public class AddEmployeeActivity extends BaseActivity implements View.OnClickLis
 
     private void insertUser() {
         UserDao dao = mDaoSession.getUserDao();
-        dao.insert(new User(null, mNameET.getText().toString(), mJoinDate,
-                Float.valueOf(mBaseSalaryET.getText().toString())));
+        if (dao.queryBuilder().where(UserDao.
+                Properties.Name.eq(mNameET.getText().toString())).list().size() == 0) {
+
+            float base = Float.valueOf(mBaseSalaryET.getText().toString());
+            dao.insert(new User(null, mNameET.getText().toString(),
+                    mJoinDate, base));
+
+            Toast.makeText(this, "添加成功", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "该职员已经添加", Toast.LENGTH_SHORT).show();
+        }
     }
 }

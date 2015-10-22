@@ -1,17 +1,15 @@
 package org.scheming.salary.dao;
 
 import java.util.List;
-import java.util.ArrayList;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 
 import de.greenrobot.dao.AbstractDao;
 import de.greenrobot.dao.Property;
-import de.greenrobot.dao.internal.SqlUtils;
 import de.greenrobot.dao.internal.DaoConfig;
-
-import org.scheming.salary.entity.SalaryItem;
+import de.greenrobot.dao.query.Query;
+import de.greenrobot.dao.query.QueryBuilder;
 
 import org.scheming.salary.entity.Project;
 
@@ -29,20 +27,13 @@ public class ProjectDao extends AbstractDao<Project, Long> {
     */
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
-        public final static Property Sale_name = new Property(1, String.class, "sale_name", false, "SALE_NAME");
-        public final static Property Sale_cut_rate = new Property(2, Float.class, "sale_cut_rate", false, "SALE_CUT_RATE");
-        public final static Property Sale_total_money = new Property(3, Float.class, "sale_total_money", false, "SALE_TOTAL_MONEY");
-        public final static Property Implement_name = new Property(4, String.class, "implement_name", false, "IMPLEMENT_NAME");
-        public final static Property Implement_cut_rate = new Property(5, Float.class, "implement_cut_rate", false, "IMPLEMENT_CUT_RATE");
-        public final static Property Implement_total_money = new Property(6, Float.class, "implement_total_money", false, "IMPLEMENT_TOTAL_MONEY");
-        public final static Property Service_name = new Property(7, String.class, "service_name", false, "SERVICE_NAME");
-        public final static Property Service_cut_rate = new Property(8, Float.class, "service_cut_rate", false, "SERVICE_CUT_RATE");
-        public final static Property Service_total_money = new Property(9, Float.class, "service_total_money", false, "SERVICE_TOTAL_MONEY");
-        public final static Property Salary_item = new Property(10, Long.class, "salary_item", false, "SALARY_ITEM");
+        public final static Property Name = new Property(1, String.class, "name", false, "NAME");
+        public final static Property Cut_rate = new Property(2, Float.class, "cut_rate", false, "CUT_RATE");
+        public final static Property Total_money = new Property(3, Float.class, "total_money", false, "TOTAL_MONEY");
+        public final static Property Salary = new Property(4, Long.class, "salary", false, "SALARY");
     };
 
-    private DaoSession daoSession;
-
+    private Query<Project> salary_ProjectsQuery;
 
     public ProjectDao(DaoConfig config) {
         super(config);
@@ -50,7 +41,6 @@ public class ProjectDao extends AbstractDao<Project, Long> {
     
     public ProjectDao(DaoConfig config, DaoSession daoSession) {
         super(config, daoSession);
-        this.daoSession = daoSession;
     }
 
     /** Creates the underlying database table. */
@@ -58,16 +48,10 @@ public class ProjectDao extends AbstractDao<Project, Long> {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"PROJECT\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
-                "\"SALE_NAME\" TEXT," + // 1: sale_name
-                "\"SALE_CUT_RATE\" REAL," + // 2: sale_cut_rate
-                "\"SALE_TOTAL_MONEY\" REAL," + // 3: sale_total_money
-                "\"IMPLEMENT_NAME\" TEXT," + // 4: implement_name
-                "\"IMPLEMENT_CUT_RATE\" REAL," + // 5: implement_cut_rate
-                "\"IMPLEMENT_TOTAL_MONEY\" REAL," + // 6: implement_total_money
-                "\"SERVICE_NAME\" TEXT," + // 7: service_name
-                "\"SERVICE_CUT_RATE\" REAL," + // 8: service_cut_rate
-                "\"SERVICE_TOTAL_MONEY\" REAL," + // 9: service_total_money
-                "\"SALARY_ITEM\" INTEGER);"); // 10: salary_item
+                "\"NAME\" TEXT," + // 1: name
+                "\"CUT_RATE\" REAL," + // 2: cut_rate
+                "\"TOTAL_MONEY\" REAL," + // 3: total_money
+                "\"SALARY\" INTEGER);"); // 4: salary
     }
 
     /** Drops the underlying database table. */
@@ -86,61 +70,25 @@ public class ProjectDao extends AbstractDao<Project, Long> {
             stmt.bindLong(1, id);
         }
  
-        String sale_name = entity.getSale_name();
-        if (sale_name != null) {
-            stmt.bindString(2, sale_name);
+        String name = entity.getName();
+        if (name != null) {
+            stmt.bindString(2, name);
         }
  
-        Float sale_cut_rate = entity.getSale_cut_rate();
-        if (sale_cut_rate != null) {
-            stmt.bindDouble(3, sale_cut_rate);
+        Float cut_rate = entity.getCut_rate();
+        if (cut_rate != null) {
+            stmt.bindDouble(3, cut_rate);
         }
  
-        Float sale_total_money = entity.getSale_total_money();
-        if (sale_total_money != null) {
-            stmt.bindDouble(4, sale_total_money);
+        Float total_money = entity.getTotal_money();
+        if (total_money != null) {
+            stmt.bindDouble(4, total_money);
         }
  
-        String implement_name = entity.getImplement_name();
-        if (implement_name != null) {
-            stmt.bindString(5, implement_name);
+        Long salary = entity.getSalary();
+        if (salary != null) {
+            stmt.bindLong(5, salary);
         }
- 
-        Float implement_cut_rate = entity.getImplement_cut_rate();
-        if (implement_cut_rate != null) {
-            stmt.bindDouble(6, implement_cut_rate);
-        }
- 
-        Float implement_total_money = entity.getImplement_total_money();
-        if (implement_total_money != null) {
-            stmt.bindDouble(7, implement_total_money);
-        }
- 
-        String service_name = entity.getService_name();
-        if (service_name != null) {
-            stmt.bindString(8, service_name);
-        }
- 
-        Float service_cut_rate = entity.getService_cut_rate();
-        if (service_cut_rate != null) {
-            stmt.bindDouble(9, service_cut_rate);
-        }
- 
-        Float service_total_money = entity.getService_total_money();
-        if (service_total_money != null) {
-            stmt.bindDouble(10, service_total_money);
-        }
- 
-        Long salary_item = entity.getSalary_item();
-        if (salary_item != null) {
-            stmt.bindLong(11, salary_item);
-        }
-    }
-
-    @Override
-    protected void attachEntity(Project entity) {
-        super.attachEntity(entity);
-        entity.__setDaoSession(daoSession);
     }
 
     /** @inheritdoc */
@@ -154,16 +102,10 @@ public class ProjectDao extends AbstractDao<Project, Long> {
     public Project readEntity(Cursor cursor, int offset) {
         Project entity = new Project( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
-            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // sale_name
-            cursor.isNull(offset + 2) ? null : cursor.getFloat(offset + 2), // sale_cut_rate
-            cursor.isNull(offset + 3) ? null : cursor.getFloat(offset + 3), // sale_total_money
-            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // implement_name
-            cursor.isNull(offset + 5) ? null : cursor.getFloat(offset + 5), // implement_cut_rate
-            cursor.isNull(offset + 6) ? null : cursor.getFloat(offset + 6), // implement_total_money
-            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // service_name
-            cursor.isNull(offset + 8) ? null : cursor.getFloat(offset + 8), // service_cut_rate
-            cursor.isNull(offset + 9) ? null : cursor.getFloat(offset + 9), // service_total_money
-            cursor.isNull(offset + 10) ? null : cursor.getLong(offset + 10) // salary_item
+            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // name
+            cursor.isNull(offset + 2) ? null : cursor.getFloat(offset + 2), // cut_rate
+            cursor.isNull(offset + 3) ? null : cursor.getFloat(offset + 3), // total_money
+            cursor.isNull(offset + 4) ? null : cursor.getLong(offset + 4) // salary
         );
         return entity;
     }
@@ -172,16 +114,10 @@ public class ProjectDao extends AbstractDao<Project, Long> {
     @Override
     public void readEntity(Cursor cursor, Project entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
-        entity.setSale_name(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
-        entity.setSale_cut_rate(cursor.isNull(offset + 2) ? null : cursor.getFloat(offset + 2));
-        entity.setSale_total_money(cursor.isNull(offset + 3) ? null : cursor.getFloat(offset + 3));
-        entity.setImplement_name(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
-        entity.setImplement_cut_rate(cursor.isNull(offset + 5) ? null : cursor.getFloat(offset + 5));
-        entity.setImplement_total_money(cursor.isNull(offset + 6) ? null : cursor.getFloat(offset + 6));
-        entity.setService_name(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
-        entity.setService_cut_rate(cursor.isNull(offset + 8) ? null : cursor.getFloat(offset + 8));
-        entity.setService_total_money(cursor.isNull(offset + 9) ? null : cursor.getFloat(offset + 9));
-        entity.setSalary_item(cursor.isNull(offset + 10) ? null : cursor.getLong(offset + 10));
+        entity.setName(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
+        entity.setCut_rate(cursor.isNull(offset + 2) ? null : cursor.getFloat(offset + 2));
+        entity.setTotal_money(cursor.isNull(offset + 3) ? null : cursor.getFloat(offset + 3));
+        entity.setSalary(cursor.isNull(offset + 4) ? null : cursor.getLong(offset + 4));
      }
     
     /** @inheritdoc */
@@ -207,95 +143,18 @@ public class ProjectDao extends AbstractDao<Project, Long> {
         return true;
     }
     
-    private String selectDeep;
-
-    protected String getSelectDeep() {
-        if (selectDeep == null) {
-            StringBuilder builder = new StringBuilder("SELECT ");
-            SqlUtils.appendColumns(builder, "T", getAllColumns());
-            builder.append(',');
-            SqlUtils.appendColumns(builder, "T0", daoSession.getSalaryItemDao().getAllColumns());
-            builder.append(" FROM PROJECT T");
-            builder.append(" LEFT JOIN SALARY_ITEM T0 ON T.\"SALARY_ITEM\"=T0.\"_id\"");
-            builder.append(' ');
-            selectDeep = builder.toString();
-        }
-        return selectDeep;
-    }
-    
-    protected Project loadCurrentDeep(Cursor cursor, boolean lock) {
-        Project entity = loadCurrent(cursor, 0, lock);
-        int offset = getAllColumns().length;
-
-        SalaryItem project_salary_relation = loadCurrentOther(daoSession.getSalaryItemDao(), cursor, offset);
-        entity.setProject_salary_relation(project_salary_relation);
-
-        return entity;    
-    }
-
-    public Project loadDeep(Long key) {
-        assertSinglePk();
-        if (key == null) {
-            return null;
-        }
-
-        StringBuilder builder = new StringBuilder(getSelectDeep());
-        builder.append("WHERE ");
-        SqlUtils.appendColumnsEqValue(builder, "T", getPkColumns());
-        String sql = builder.toString();
-        
-        String[] keyArray = new String[] { key.toString() };
-        Cursor cursor = db.rawQuery(sql, keyArray);
-        
-        try {
-            boolean available = cursor.moveToFirst();
-            if (!available) {
-                return null;
-            } else if (!cursor.isLast()) {
-                throw new IllegalStateException("Expected unique result, but count was " + cursor.getCount());
-            }
-            return loadCurrentDeep(cursor, true);
-        } finally {
-            cursor.close();
-        }
-    }
-    
-    /** Reads all available rows from the given cursor and returns a list of new ImageTO objects. */
-    public List<Project> loadAllDeepFromCursor(Cursor cursor) {
-        int count = cursor.getCount();
-        List<Project> list = new ArrayList<Project>(count);
-        
-        if (cursor.moveToFirst()) {
-            if (identityScope != null) {
-                identityScope.lock();
-                identityScope.reserveRoom(count);
-            }
-            try {
-                do {
-                    list.add(loadCurrentDeep(cursor, false));
-                } while (cursor.moveToNext());
-            } finally {
-                if (identityScope != null) {
-                    identityScope.unlock();
-                }
+    /** Internal query to resolve the "projects" to-many relationship of Salary. */
+    public List<Project> _querySalary_Projects(Long salary) {
+        synchronized (this) {
+            if (salary_ProjectsQuery == null) {
+                QueryBuilder<Project> queryBuilder = queryBuilder();
+                queryBuilder.where(Properties.Salary.eq(null));
+                salary_ProjectsQuery = queryBuilder.build();
             }
         }
-        return list;
+        Query<Project> query = salary_ProjectsQuery.forCurrentThread();
+        query.setParameter(0, salary);
+        return query.list();
     }
-    
-    protected List<Project> loadDeepAllAndCloseCursor(Cursor cursor) {
-        try {
-            return loadAllDeepFromCursor(cursor);
-        } finally {
-            cursor.close();
-        }
-    }
-    
 
-    /** A raw-style query where you can pass any WHERE clause and arguments. */
-    public List<Project> queryDeep(String where, String... selectionArg) {
-        Cursor cursor = db.rawQuery(getSelectDeep() + where, selectionArg);
-        return loadDeepAllAndCloseCursor(cursor);
-    }
- 
 }

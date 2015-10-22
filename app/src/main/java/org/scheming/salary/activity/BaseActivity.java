@@ -34,8 +34,4 @@ public class BaseActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-
-    public void onEvent(Message msg){
-    }
-
 }

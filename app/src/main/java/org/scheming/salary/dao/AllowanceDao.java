@@ -11,7 +11,7 @@ import de.greenrobot.dao.Property;
 import de.greenrobot.dao.internal.SqlUtils;
 import de.greenrobot.dao.internal.DaoConfig;
 
-import org.scheming.salary.entity.SalaryItem;
+import org.scheming.salary.entity.Salary;
 
 import org.scheming.salary.entity.Allowance;
 
@@ -35,7 +35,7 @@ public class AllowanceDao extends AbstractDao<Allowance, Long> {
         public final static Property Other = new Property(4, Float.class, "other", false, "OTHER");
         public final static Property Special = new Property(5, Float.class, "special", false, "SPECIAL");
         public final static Property Post = new Property(6, Float.class, "post", false, "POST");
-        public final static Property Salary_item = new Property(7, Long.class, "salary_item", false, "SALARY_ITEM");
+        public final static Property Salary = new Property(7, Long.class, "salary", false, "SALARY");
     };
 
     private DaoSession daoSession;
@@ -61,7 +61,7 @@ public class AllowanceDao extends AbstractDao<Allowance, Long> {
                 "\"OTHER\" REAL," + // 4: other
                 "\"SPECIAL\" REAL," + // 5: special
                 "\"POST\" REAL," + // 6: post
-                "\"SALARY_ITEM\" INTEGER);"); // 7: salary_item
+                "\"SALARY\" INTEGER);"); // 7: salary
     }
 
     /** Drops the underlying database table. */
@@ -110,9 +110,9 @@ public class AllowanceDao extends AbstractDao<Allowance, Long> {
             stmt.bindDouble(7, post);
         }
  
-        Long salary_item = entity.getSalary_item();
-        if (salary_item != null) {
-            stmt.bindLong(8, salary_item);
+        Long salary = entity.getSalary();
+        if (salary != null) {
+            stmt.bindLong(8, salary);
         }
     }
 
@@ -139,7 +139,7 @@ public class AllowanceDao extends AbstractDao<Allowance, Long> {
             cursor.isNull(offset + 4) ? null : cursor.getFloat(offset + 4), // other
             cursor.isNull(offset + 5) ? null : cursor.getFloat(offset + 5), // special
             cursor.isNull(offset + 6) ? null : cursor.getFloat(offset + 6), // post
-            cursor.isNull(offset + 7) ? null : cursor.getLong(offset + 7) // salary_item
+            cursor.isNull(offset + 7) ? null : cursor.getLong(offset + 7) // salary
         );
         return entity;
     }
@@ -154,7 +154,7 @@ public class AllowanceDao extends AbstractDao<Allowance, Long> {
         entity.setOther(cursor.isNull(offset + 4) ? null : cursor.getFloat(offset + 4));
         entity.setSpecial(cursor.isNull(offset + 5) ? null : cursor.getFloat(offset + 5));
         entity.setPost(cursor.isNull(offset + 6) ? null : cursor.getFloat(offset + 6));
-        entity.setSalary_item(cursor.isNull(offset + 7) ? null : cursor.getLong(offset + 7));
+        entity.setSalary(cursor.isNull(offset + 7) ? null : cursor.getLong(offset + 7));
      }
     
     /** @inheritdoc */
@@ -187,9 +187,9 @@ public class AllowanceDao extends AbstractDao<Allowance, Long> {
             StringBuilder builder = new StringBuilder("SELECT ");
             SqlUtils.appendColumns(builder, "T", getAllColumns());
             builder.append(',');
-            SqlUtils.appendColumns(builder, "T0", daoSession.getSalaryItemDao().getAllColumns());
+            SqlUtils.appendColumns(builder, "T0", daoSession.getSalaryDao().getAllColumns());
             builder.append(" FROM ALLOWANCE T");
-            builder.append(" LEFT JOIN SALARY_ITEM T0 ON T.\"SALARY_ITEM\"=T0.\"_id\"");
+            builder.append(" LEFT JOIN SALARY T0 ON T.\"SALARY\"=T0.\"_id\"");
             builder.append(' ');
             selectDeep = builder.toString();
         }
@@ -200,7 +200,7 @@ public class AllowanceDao extends AbstractDao<Allowance, Long> {
         Allowance entity = loadCurrent(cursor, 0, lock);
         int offset = getAllColumns().length;
 
-        SalaryItem allowance_salary_relation = loadCurrentOther(daoSession.getSalaryItemDao(), cursor, offset);
+        Salary allowance_salary_relation = loadCurrentOther(daoSession.getSalaryDao(), cursor, offset);
         entity.setAllowance_salary_relation(allowance_salary_relation);
 
         return entity;    

@@ -11,7 +11,7 @@ import de.greenrobot.dao.Property;
 import de.greenrobot.dao.internal.SqlUtils;
 import de.greenrobot.dao.internal.DaoConfig;
 
-import org.scheming.salary.entity.SalaryItem;
+import org.scheming.salary.entity.Salary;
 
 import org.scheming.salary.entity.Attendance;
 
@@ -34,7 +34,7 @@ public class AttendanceDao extends AbstractDao<Attendance, Long> {
         public final static Property Late = new Property(3, Integer.class, "late", false, "LATE");
         public final static Property Leave_early = new Property(4, Integer.class, "leave_early", false, "LEAVE_EARLY");
         public final static Property Absenteeism = new Property(5, Integer.class, "absenteeism", false, "ABSENTEEISM");
-        public final static Property Salary_item = new Property(6, Long.class, "salary_item", false, "SALARY_ITEM");
+        public final static Property Salary = new Property(6, Long.class, "salary", false, "SALARY");
     };
 
     private DaoSession daoSession;
@@ -59,7 +59,7 @@ public class AttendanceDao extends AbstractDao<Attendance, Long> {
                 "\"LATE\" INTEGER," + // 3: late
                 "\"LEAVE_EARLY\" INTEGER," + // 4: leave_early
                 "\"ABSENTEEISM\" INTEGER," + // 5: absenteeism
-                "\"SALARY_ITEM\" INTEGER);"); // 6: salary_item
+                "\"SALARY\" INTEGER);"); // 6: salary
     }
 
     /** Drops the underlying database table. */
@@ -103,9 +103,9 @@ public class AttendanceDao extends AbstractDao<Attendance, Long> {
             stmt.bindLong(6, absenteeism);
         }
  
-        Long salary_item = entity.getSalary_item();
-        if (salary_item != null) {
-            stmt.bindLong(7, salary_item);
+        Long salary = entity.getSalary();
+        if (salary != null) {
+            stmt.bindLong(7, salary);
         }
     }
 
@@ -131,7 +131,7 @@ public class AttendanceDao extends AbstractDao<Attendance, Long> {
             cursor.isNull(offset + 3) ? null : cursor.getInt(offset + 3), // late
             cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4), // leave_early
             cursor.isNull(offset + 5) ? null : cursor.getInt(offset + 5), // absenteeism
-            cursor.isNull(offset + 6) ? null : cursor.getLong(offset + 6) // salary_item
+            cursor.isNull(offset + 6) ? null : cursor.getLong(offset + 6) // salary
         );
         return entity;
     }
@@ -145,7 +145,7 @@ public class AttendanceDao extends AbstractDao<Attendance, Long> {
         entity.setLate(cursor.isNull(offset + 3) ? null : cursor.getInt(offset + 3));
         entity.setLeave_early(cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4));
         entity.setAbsenteeism(cursor.isNull(offset + 5) ? null : cursor.getInt(offset + 5));
-        entity.setSalary_item(cursor.isNull(offset + 6) ? null : cursor.getLong(offset + 6));
+        entity.setSalary(cursor.isNull(offset + 6) ? null : cursor.getLong(offset + 6));
      }
     
     /** @inheritdoc */
@@ -178,9 +178,9 @@ public class AttendanceDao extends AbstractDao<Attendance, Long> {
             StringBuilder builder = new StringBuilder("SELECT ");
             SqlUtils.appendColumns(builder, "T", getAllColumns());
             builder.append(',');
-            SqlUtils.appendColumns(builder, "T0", daoSession.getSalaryItemDao().getAllColumns());
+            SqlUtils.appendColumns(builder, "T0", daoSession.getSalaryDao().getAllColumns());
             builder.append(" FROM ATTENDANCE T");
-            builder.append(" LEFT JOIN SALARY_ITEM T0 ON T.\"SALARY_ITEM\"=T0.\"_id\"");
+            builder.append(" LEFT JOIN SALARY T0 ON T.\"SALARY\"=T0.\"_id\"");
             builder.append(' ');
             selectDeep = builder.toString();
         }
@@ -191,7 +191,7 @@ public class AttendanceDao extends AbstractDao<Attendance, Long> {
         Attendance entity = loadCurrent(cursor, 0, lock);
         int offset = getAllColumns().length;
 
-        SalaryItem attendance_salary_relation = loadCurrentOther(daoSession.getSalaryItemDao(), cursor, offset);
+        Salary attendance_salary_relation = loadCurrentOther(daoSession.getSalaryDao(), cursor, offset);
         entity.setAttendance_salary_relation(attendance_salary_relation);
 
         return entity;    

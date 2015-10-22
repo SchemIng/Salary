@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Salary</string>
+    <string name="app_name">工资核算</string>
     <string name="menu_frame_add_employee">添加职员</string>
     <string name="add_employee_name_string">姓名</string>
     <string name="add_employee_base_salary_string">基本工资</string>
@@ -21,4 +21,12 @@
     <string name="salary_other_string">其他</string>
     <string name="salary_special_string">特殊岗位</string>
     <string name="salary_post_string">岗位</string>
+    <string name="menu_month_add">添加月份</string>
+    <string name="salary_month_string">月份</string>
+    <string name="frame_activity_title_string">员工列表</string>
+    <string name="add_employee_activity_title_string">新增员工</string>
+    <string name="salary_activity_title_string">当月工资核算</string>
+    <string name="dialog_project_name_string">项目名称</string>
+    <string name="dialog_project_money_string">金额</string>
+    <string name="dialog_project_rate_string">提成比例</string>
 </resources>

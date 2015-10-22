@@ -9,7 +9,7 @@ import de.greenrobot.dao.AbstractDaoMaster;
 import de.greenrobot.dao.identityscope.IdentityScopeType;
 
 import org.scheming.salary.dao.UserDao;
-import org.scheming.salary.dao.SalaryItemDao;
+import org.scheming.salary.dao.SalaryDao;
 import org.scheming.salary.dao.ProjectDao;
 import org.scheming.salary.dao.AllowanceDao;
 import org.scheming.salary.dao.AttendanceDao;
@@ -24,7 +24,7 @@ public class DaoMaster extends AbstractDaoMaster {
     /** Creates underlying database table using DAOs. */
     public static void createAllTables(SQLiteDatabase db, boolean ifNotExists) {
         UserDao.createTable(db, ifNotExists);
-        SalaryItemDao.createTable(db, ifNotExists);
+        SalaryDao.createTable(db, ifNotExists);
         ProjectDao.createTable(db, ifNotExists);
         AllowanceDao.createTable(db, ifNotExists);
         AttendanceDao.createTable(db, ifNotExists);
@@ -33,7 +33,7 @@ public class DaoMaster extends AbstractDaoMaster {
     /** Drops underlying database table using DAOs. */
     public static void dropAllTables(SQLiteDatabase db, boolean ifExists) {
         UserDao.dropTable(db, ifExists);
-        SalaryItemDao.dropTable(db, ifExists);
+        SalaryDao.dropTable(db, ifExists);
         ProjectDao.dropTable(db, ifExists);
         AllowanceDao.dropTable(db, ifExists);
         AttendanceDao.dropTable(db, ifExists);
@@ -69,7 +69,7 @@ public class DaoMaster extends AbstractDaoMaster {
     public DaoMaster(SQLiteDatabase db) {
         super(db, SCHEMA_VERSION);
         registerDaoClass(UserDao.class);
-        registerDaoClass(SalaryItemDao.class);
+        registerDaoClass(SalaryDao.class);
         registerDaoClass(ProjectDao.class);
         registerDaoClass(AllowanceDao.class);
         registerDaoClass(AttendanceDao.class);

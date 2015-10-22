@@ -17,10 +17,14 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.AddEmployeeActivity"
+            android:name=".activity.EmployeeActivity"
+            android:label="@string/add_employee_activity_title_string"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity android:name=".activity.MonthsActivity" />
-        <activity android:name=".activity.SalaryActivity"/>
+        <activity
+            android:name=".activity.SalaryActivity"
+            android:label="@string/salary_activity_title_string"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
     </application>
 
 </manifest>
