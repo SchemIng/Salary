@@ -27,10 +27,11 @@ public class ProjectDao extends AbstractDao<Project, Long> {
     */
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
-        public final static Property Name = new Property(1, String.class, "name", false, "NAME");
-        public final static Property Cut_rate = new Property(2, Float.class, "cut_rate", false, "CUT_RATE");
-        public final static Property Total_money = new Property(3, Float.class, "total_money", false, "TOTAL_MONEY");
-        public final static Property Salary = new Property(4, Long.class, "salary", false, "SALARY");
+        public final static Property Type = new Property(1, Integer.class, "type", false, "TYPE");
+        public final static Property Name = new Property(2, String.class, "name", false, "NAME");
+        public final static Property Cut_rate = new Property(3, Float.class, "cut_rate", false, "CUT_RATE");
+        public final static Property Total_money = new Property(4, Float.class, "total_money", false, "TOTAL_MONEY");
+        public final static Property Salary = new Property(5, Long.class, "salary", false, "SALARY");
     };
 
     private Query<Project> salary_ProjectsQuery;
@@ -48,10 +49,11 @@ public class ProjectDao extends AbstractDao<Project, Long> {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"PROJECT\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
-                "\"NAME\" TEXT," + // 1: name
-                "\"CUT_RATE\" REAL," + // 2: cut_rate
-                "\"TOTAL_MONEY\" REAL," + // 3: total_money
-                "\"SALARY\" INTEGER);"); // 4: salary
+                "\"TYPE\" INTEGER," + // 1: type
+                "\"NAME\" TEXT," + // 2: name
+                "\"CUT_RATE\" REAL," + // 3: cut_rate
+                "\"TOTAL_MONEY\" REAL," + // 4: total_money
+                "\"SALARY\" INTEGER);"); // 5: salary
     }
 
     /** Drops the underlying database table. */
@@ -70,24 +72,29 @@ public class ProjectDao extends AbstractDao<Project, Long> {
             stmt.bindLong(1, id);
         }
  
+        Integer type = entity.getType();
+        if (type != null) {
+            stmt.bindLong(2, type);
+        }
+ 
         String name = entity.getName();
         if (name != null) {
-            stmt.bindString(2, name);
+            stmt.bindString(3, name);
         }
  
         Float cut_rate = entity.getCut_rate();
         if (cut_rate != null) {
-            stmt.bindDouble(3, cut_rate);
+            stmt.bindDouble(4, cut_rate);
         }
  
         Float total_money = entity.getTotal_money();
         if (total_money != null) {
-            stmt.bindDouble(4, total_money);
+            stmt.bindDouble(5, total_money);
         }
  
         Long salary = entity.getSalary();
         if (salary != null) {
-            stmt.bindLong(5, salary);
+            stmt.bindLong(6, salary);
         }
     }
 
@@ -102,10 +109,11 @@ public class ProjectDao extends AbstractDao<Project, Long> {
     public Project readEntity(Cursor cursor, int offset) {
         Project entity = new Project( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
-            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // name
-            cursor.isNull(offset + 2) ? null : cursor.getFloat(offset + 2), // cut_rate
-            cursor.isNull(offset + 3) ? null : cursor.getFloat(offset + 3), // total_money
-            cursor.isNull(offset + 4) ? null : cursor.getLong(offset + 4) // salary
+            cursor.isNull(offset + 1) ? null : cursor.getInt(offset + 1), // type
+            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // name
+            cursor.isNull(offset + 3) ? null : cursor.getFloat(offset + 3), // cut_rate
+            cursor.isNull(offset + 4) ? null : cursor.getFloat(offset + 4), // total_money
+            cursor.isNull(offset + 5) ? null : cursor.getLong(offset + 5) // salary
         );
         return entity;
     }
@@ -114,10 +122,11 @@ public class ProjectDao extends AbstractDao<Project, Long> {
     @Override
     public void readEntity(Cursor cursor, Project entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
-        entity.setName(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
-        entity.setCut_rate(cursor.isNull(offset + 2) ? null : cursor.getFloat(offset + 2));
-        entity.setTotal_money(cursor.isNull(offset + 3) ? null : cursor.getFloat(offset + 3));
-        entity.setSalary(cursor.isNull(offset + 4) ? null : cursor.getLong(offset + 4));
+        entity.setType(cursor.isNull(offset + 1) ? null : cursor.getInt(offset + 1));
+        entity.setName(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
+        entity.setCut_rate(cursor.isNull(offset + 3) ? null : cursor.getFloat(offset + 3));
+        entity.setTotal_money(cursor.isNull(offset + 4) ? null : cursor.getFloat(offset + 4));
+        entity.setSalary(cursor.isNull(offset + 5) ? null : cursor.getLong(offset + 5));
      }
     
     /** @inheritdoc */

@@ -13,6 +13,7 @@ import org.scheming.salary.SalaryApplication;
 import org.scheming.salary.adapter.FrameRecyclerAdapter;
 import org.scheming.salary.dao.UserDao;
 import org.scheming.salary.entity.User;
+import org.scheming.salary.utils.ConstField;
 import org.scheming.salary.utils.Message;
 
 import java.util.List;
@@ -21,8 +22,6 @@ import butterknife.Bind;
 import de.greenrobot.dao.query.QueryBuilder;
 
 public class FrameActivity extends BaseActivity implements FrameRecyclerAdapter.ItemClickListener {
-    public static final int UPDATE_USER = 1;
-
     @Bind(R.id.frame_recycler)
     RecyclerView mUserRecyclerV;
 
@@ -55,6 +54,7 @@ public class FrameActivity extends BaseActivity implements FrameRecyclerAdapter.
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_frame_add) {
             Intent intent = new Intent(this, EmployeeActivity.class);
+            intent.putExtra(ConstField.IS_ADD_EMPLOYEE, true);
             startActivity(intent);
         }
         return true;
@@ -63,7 +63,7 @@ public class FrameActivity extends BaseActivity implements FrameRecyclerAdapter.
     public void onEvent(Message msg) {
         if (msg.clazz.equals(getClass())) {
             switch (msg.what) {
-                case UPDATE_USER:
+                case ConstField.UPDATE_USER:
                     users = mUserDaoBuilder.list();
                     mAdapter.setDatas(users);
                     mAdapter.notifyDataSetChanged();
@@ -74,8 +74,7 @@ public class FrameActivity extends BaseActivity implements FrameRecyclerAdapter.
 
     @Override
     public void onItemClickListener(View view, int position) {
-        Intent intent = new Intent(this, MonthsActivity.class);
-        intent.putExtra(UserDao.Properties.Name.name, users.get(position).getName());
+        Intent intent = new Intent(this, EmployeeActivity.class);
         intent.putExtra(UserDao.Properties.Id.name, users.get(position).getId());
         startActivity(intent);
     }

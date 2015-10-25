@@ -1,17 +1,15 @@
 package org.scheming.salary.dao;
 
 import java.util.List;
-import java.util.ArrayList;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 
 import de.greenrobot.dao.AbstractDao;
 import de.greenrobot.dao.Property;
-import de.greenrobot.dao.internal.SqlUtils;
 import de.greenrobot.dao.internal.DaoConfig;
-
-import org.scheming.salary.entity.Salary;
+import de.greenrobot.dao.query.Query;
+import de.greenrobot.dao.query.QueryBuilder;
 
 import org.scheming.salary.entity.Allowance;
 
@@ -38,8 +36,7 @@ public class AllowanceDao extends AbstractDao<Allowance, Long> {
         public final static Property Salary = new Property(7, Long.class, "salary", false, "SALARY");
     };
 
-    private DaoSession daoSession;
-
+    private Query<Allowance> salary_AllowanceQuery;
 
     public AllowanceDao(DaoConfig config) {
         super(config);
@@ -47,7 +44,6 @@ public class AllowanceDao extends AbstractDao<Allowance, Long> {
     
     public AllowanceDao(DaoConfig config, DaoSession daoSession) {
         super(config, daoSession);
-        this.daoSession = daoSession;
     }
 
     /** Creates the underlying database table. */
@@ -116,12 +112,6 @@ public class AllowanceDao extends AbstractDao<Allowance, Long> {
         }
     }
 
-    @Override
-    protected void attachEntity(Allowance entity) {
-        super.attachEntity(entity);
-        entity.__setDaoSession(daoSession);
-    }
-
     /** @inheritdoc */
     @Override
     public Long readKey(Cursor cursor, int offset) {
@@ -180,95 +170,18 @@ public class AllowanceDao extends AbstractDao<Allowance, Long> {
         return true;
     }
     
-    private String selectDeep;
-
-    protected String getSelectDeep() {
-        if (selectDeep == null) {
-            StringBuilder builder = new StringBuilder("SELECT ");
-            SqlUtils.appendColumns(builder, "T", getAllColumns());
-            builder.append(',');
-            SqlUtils.appendColumns(builder, "T0", daoSession.getSalaryDao().getAllColumns());
-            builder.append(" FROM ALLOWANCE T");
-            builder.append(" LEFT JOIN SALARY T0 ON T.\"SALARY\"=T0.\"_id\"");
-            builder.append(' ');
-            selectDeep = builder.toString();
-        }
-        return selectDeep;
-    }
-    
-    protected Allowance loadCurrentDeep(Cursor cursor, boolean lock) {
-        Allowance entity = loadCurrent(cursor, 0, lock);
-        int offset = getAllColumns().length;
-
-        Salary allowance_salary_relation = loadCurrentOther(daoSession.getSalaryDao(), cursor, offset);
-        entity.setAllowance_salary_relation(allowance_salary_relation);
-
-        return entity;    
-    }
-
-    public Allowance loadDeep(Long key) {
-        assertSinglePk();
-        if (key == null) {
-            return null;
-        }
-
-        StringBuilder builder = new StringBuilder(getSelectDeep());
-        builder.append("WHERE ");
-        SqlUtils.appendColumnsEqValue(builder, "T", getPkColumns());
-        String sql = builder.toString();
-        
-        String[] keyArray = new String[] { key.toString() };
-        Cursor cursor = db.rawQuery(sql, keyArray);
-        
-        try {
-            boolean available = cursor.moveToFirst();
-            if (!available) {
-                return null;
-            } else if (!cursor.isLast()) {
-                throw new IllegalStateException("Expected unique result, but count was " + cursor.getCount());
-            }
-            return loadCurrentDeep(cursor, true);
-        } finally {
-            cursor.close();
-        }
-    }
-    
-    /** Reads all available rows from the given cursor and returns a list of new ImageTO objects. */
-    public List<Allowance> loadAllDeepFromCursor(Cursor cursor) {
-        int count = cursor.getCount();
-        List<Allowance> list = new ArrayList<Allowance>(count);
-        
-        if (cursor.moveToFirst()) {
-            if (identityScope != null) {
-                identityScope.lock();
-                identityScope.reserveRoom(count);
-            }
-            try {
-                do {
-                    list.add(loadCurrentDeep(cursor, false));
-                } while (cursor.moveToNext());
-            } finally {
-                if (identityScope != null) {
-                    identityScope.unlock();
-                }
+    /** Internal query to resolve the "allowance" to-many relationship of Salary. */
+    public List<Allowance> _querySalary_Allowance(Long salary) {
+        synchronized (this) {
+            if (salary_AllowanceQuery == null) {
+                QueryBuilder<Allowance> queryBuilder = queryBuilder();
+                queryBuilder.where(Properties.Salary.eq(null));
+                salary_AllowanceQuery = queryBuilder.build();
             }
         }
-        return list;
+        Query<Allowance> query = salary_AllowanceQuery.forCurrentThread();
+        query.setParameter(0, salary);
+        return query.list();
     }
-    
-    protected List<Allowance> loadDeepAllAndCloseCursor(Cursor cursor) {
-        try {
-            return loadAllDeepFromCursor(cursor);
-        } finally {
-            cursor.close();
-        }
-    }
-    
 
-    /** A raw-style query where you can pass any WHERE clause and arguments. */
-    public List<Allowance> queryDeep(String where, String... selectionArg) {
-        Cursor cursor = db.rawQuery(getSelectDeep() + where, selectionArg);
-        return loadDeepAllAndCloseCursor(cursor);
-    }
- 
 }

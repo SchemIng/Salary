@@ -4,6 +4,7 @@ import de.greenrobot.daogenerator.DaoGenerator;
 import de.greenrobot.daogenerator.Entity;
 import de.greenrobot.daogenerator.Property;
 import de.greenrobot.daogenerator.Schema;
+import de.greenrobot.daogenerator.ToMany;
 
 public class MyDaoGenerator {
     public static void main(String args[]) throws Exception {
@@ -26,29 +27,22 @@ public class MyDaoGenerator {
         user.addFloatProperty("base_salary").notNull();
 
         //工资
-        Entity salary_item = schema.addEntity("SalaryItem");
+        Entity salary = schema.addEntity("Salary");
 
-        salary_item.addIdProperty().autoincrement();
-        salary_item.addIntProperty("current_month");
-        salary_item.addFloatProperty("borrow");
-        salary_item.addFloatProperty("cut_payment");
-        salary_item.addFloatProperty("personal_social_security");
+        salary.addIdProperty().autoincrement();
+        salary.addIntProperty("current_month");
+        salary.addFloatProperty("borrow");
+        salary.addFloatProperty("cut_payment");
+        salary.addFloatProperty("personal_social_security");
 
         //工程
         Entity project = schema.addEntity("Project");
 
         project.addIdProperty().autoincrement();
-        project.addStringProperty("sale_name");
-        project.addFloatProperty("sale_cut_rate");
-        project.addFloatProperty("sale_total_money");
-
-        project.addStringProperty("implement_name");
-        project.addFloatProperty("implement_cut_rate");
-        project.addFloatProperty("implement_total_money");
-
-        project.addStringProperty("service_name");
-        project.addFloatProperty("service_cut_rate");
-        project.addFloatProperty("service_total_money");
+        project.addIntProperty("type");
+        project.addStringProperty("name");
+        project.addFloatProperty("cut_rate");
+        project.addFloatProperty("total_money");
 
         //补助
         Entity allowance = schema.addEntity("Allowance");
@@ -72,14 +66,16 @@ public class MyDaoGenerator {
         attendance.addIntProperty("absenteeism");
 
         //add foreign key
-        Property allowance_property = allowance.addLongProperty("salary_item").getProperty();
-        Property attendance_property = attendance.addLongProperty("salary_item").getProperty();
-        Property project_property = project.addLongProperty("salary_item").getProperty();
-        Property salary_item_property = salary_item.addLongProperty("salary_item").getProperty();
+        Property allowance_property = allowance.addLongProperty("salary").getProperty();
+        Property attendance_property = attendance.addLongProperty("salary").getProperty();
+        Property project_property = project.addLongProperty("salary").getProperty();
+        Property salary_property = salary.addLongProperty("user").getProperty();
 
-        allowance.addToOne(salary_item, allowance_property, "allowance_salary_relation");
-        attendance.addToOne(salary_item, attendance_property, "attendance_salary_relation");
-        project.addToOne(salary_item, project_property, "project_salary_relation");
-        salary_item.addToOne(user, salary_item_property, "salary_user_relation");
+        salary.addToMany(allowance, allowance_property).setName("allowance");
+        salary.addToMany(attendance, attendance_property).setName("attendance");
+        user.addToMany(salary, salary_property).setName("salary");
+
+        ToMany salaryToProjects = salary.addToMany(project, project_property);
+        salaryToProjects.setName("projects");
     }
 }

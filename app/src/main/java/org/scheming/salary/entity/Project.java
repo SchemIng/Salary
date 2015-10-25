@@ -7,6 +7,7 @@ package org.scheming.salary.entity;
 public class Project {
 
     private Long id;
+    private Integer type;
     private String name;
     private Float cut_rate;
     private Float total_money;
@@ -19,8 +20,9 @@ public class Project {
         this.id = id;
     }
 
-    public Project(Long id, String name, Float cut_rate, Float total_money, Long salary) {
+    public Project(Long id, Integer type, String name, Float cut_rate, Float total_money, Long salary) {
         this.id = id;
+        this.type = type;
         this.name = name;
         this.cut_rate = cut_rate;
         this.total_money = total_money;
@@ -33,6 +35,14 @@ public class Project {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
     }
 
     public String getName() {

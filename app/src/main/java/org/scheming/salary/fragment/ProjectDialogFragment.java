@@ -2,6 +2,7 @@ package org.scheming.salary.fragment;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -18,7 +19,7 @@ import de.greenrobot.event.EventBus;
 /**
  * Created by Scheming on 2015/10/20.
  */
-public class ProjectDialogFragment extends BaseFragment {
+public class ProjectDialogFragment extends DialogFragment {
     @Bind(R.id.dialog_project_name_edit)
     EditText mName;
 
@@ -37,7 +38,6 @@ public class ProjectDialogFragment extends BaseFragment {
 
         builder.setView(view);
         ButterKnife.bind(view);
-
 
         builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
             @Override

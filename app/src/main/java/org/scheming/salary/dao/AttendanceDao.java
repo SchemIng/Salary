@@ -1,17 +1,15 @@
 package org.scheming.salary.dao;
 
 import java.util.List;
-import java.util.ArrayList;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 
 import de.greenrobot.dao.AbstractDao;
 import de.greenrobot.dao.Property;
-import de.greenrobot.dao.internal.SqlUtils;
 import de.greenrobot.dao.internal.DaoConfig;
-
-import org.scheming.salary.entity.Salary;
+import de.greenrobot.dao.query.Query;
+import de.greenrobot.dao.query.QueryBuilder;
 
 import org.scheming.salary.entity.Attendance;
 
@@ -37,8 +35,7 @@ public class AttendanceDao extends AbstractDao<Attendance, Long> {
         public final static Property Salary = new Property(6, Long.class, "salary", false, "SALARY");
     };
 
-    private DaoSession daoSession;
-
+    private Query<Attendance> salary_AttendanceQuery;
 
     public AttendanceDao(DaoConfig config) {
         super(config);
@@ -46,7 +43,6 @@ public class AttendanceDao extends AbstractDao<Attendance, Long> {
     
     public AttendanceDao(DaoConfig config, DaoSession daoSession) {
         super(config, daoSession);
-        this.daoSession = daoSession;
     }
 
     /** Creates the underlying database table. */
@@ -109,12 +105,6 @@ public class AttendanceDao extends AbstractDao<Attendance, Long> {
         }
     }
 
-    @Override
-    protected void attachEntity(Attendance entity) {
-        super.attachEntity(entity);
-        entity.__setDaoSession(daoSession);
-    }
-
     /** @inheritdoc */
     @Override
     public Long readKey(Cursor cursor, int offset) {
@@ -171,95 +161,18 @@ public class AttendanceDao extends AbstractDao<Attendance, Long> {
         return true;
     }
     
-    private String selectDeep;
-
-    protected String getSelectDeep() {
-        if (selectDeep == null) {
-            StringBuilder builder = new StringBuilder("SELECT ");
-            SqlUtils.appendColumns(builder, "T", getAllColumns());
-            builder.append(',');
-            SqlUtils.appendColumns(builder, "T0", daoSession.getSalaryDao().getAllColumns());
-            builder.append(" FROM ATTENDANCE T");
-            builder.append(" LEFT JOIN SALARY T0 ON T.\"SALARY\"=T0.\"_id\"");
-            builder.append(' ');
-            selectDeep = builder.toString();
-        }
-        return selectDeep;
-    }
-    
-    protected Attendance loadCurrentDeep(Cursor cursor, boolean lock) {
-        Attendance entity = loadCurrent(cursor, 0, lock);
-        int offset = getAllColumns().length;
-
-        Salary attendance_salary_relation = loadCurrentOther(daoSession.getSalaryDao(), cursor, offset);
-        entity.setAttendance_salary_relation(attendance_salary_relation);
-
-        return entity;    
-    }
-
-    public Attendance loadDeep(Long key) {
-        assertSinglePk();
-        if (key == null) {
-            return null;
-        }
-
-        StringBuilder builder = new StringBuilder(getSelectDeep());
-        builder.append("WHERE ");
-        SqlUtils.appendColumnsEqValue(builder, "T", getPkColumns());
-        String sql = builder.toString();
-        
-        String[] keyArray = new String[] { key.toString() };
-        Cursor cursor = db.rawQuery(sql, keyArray);
-        
-        try {
-            boolean available = cursor.moveToFirst();
-            if (!available) {
-                return null;
-            } else if (!cursor.isLast()) {
-                throw new IllegalStateException("Expected unique result, but count was " + cursor.getCount());
-            }
-            return loadCurrentDeep(cursor, true);
-        } finally {
-            cursor.close();
-        }
-    }
-    
-    /** Reads all available rows from the given cursor and returns a list of new ImageTO objects. */
-    public List<Attendance> loadAllDeepFromCursor(Cursor cursor) {
-        int count = cursor.getCount();
-        List<Attendance> list = new ArrayList<Attendance>(count);
-        
-        if (cursor.moveToFirst()) {
-            if (identityScope != null) {
-                identityScope.lock();
-                identityScope.reserveRoom(count);
-            }
-            try {
-                do {
-                    list.add(loadCurrentDeep(cursor, false));
-                } while (cursor.moveToNext());
-            } finally {
-                if (identityScope != null) {
-                    identityScope.unlock();
-                }
+    /** Internal query to resolve the "attendance" to-many relationship of Salary. */
+    public List<Attendance> _querySalary_Attendance(Long salary) {
+        synchronized (this) {
+            if (salary_AttendanceQuery == null) {
+                QueryBuilder<Attendance> queryBuilder = queryBuilder();
+                queryBuilder.where(Properties.Salary.eq(null));
+                salary_AttendanceQuery = queryBuilder.build();
             }
         }
-        return list;
+        Query<Attendance> query = salary_AttendanceQuery.forCurrentThread();
+        query.setParameter(0, salary);
+        return query.list();
     }
-    
-    protected List<Attendance> loadDeepAllAndCloseCursor(Cursor cursor) {
-        try {
-            return loadAllDeepFromCursor(cursor);
-        } finally {
-            cursor.close();
-        }
-    }
-    
 
-    /** A raw-style query where you can pass any WHERE clause and arguments. */
-    public List<Attendance> queryDeep(String where, String... selectionArg) {
-        Cursor cursor = db.rawQuery(getSelectDeep() + where, selectionArg);
-        return loadDeepAllAndCloseCursor(cursor);
-    }
- 
 }
