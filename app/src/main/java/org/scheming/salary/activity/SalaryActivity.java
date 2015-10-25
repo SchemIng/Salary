@@ -114,10 +114,10 @@ public class SalaryActivity extends BaseActivity implements AdapterView.OnItemSe
                         mProjectSale = project;
                         break;
                     case 2:
-                        mProjectSale = project;
+                        mProjectProgress = project;
                         break;
                     case 3:
-                        mProjectSale = project;
+                        mProjectService = project;
                         break;
                 }
             }
@@ -193,11 +193,8 @@ public class SalaryActivity extends BaseActivity implements AdapterView.OnItemSe
             //update
             mSalaryDao.update(salary);
             mAllowanceDao.update(allowance);
-            if (mProjectSale != null)
             mProjectDao.update(mProjectSale);
-            if (mProjectProgress != null)
             mProjectDao.update(mProjectProgress);
-            if (mProjectService != null)
             mProjectDao.update(mProjectService);
 
             text = "信息更新成功";
@@ -206,12 +203,18 @@ public class SalaryActivity extends BaseActivity implements AdapterView.OnItemSe
             allowance.setSalary(mSalaryDao.insert(salary));
 
             mAllowanceDao.insert(allowance);
-            if (mProjectSale != null)
-                mProjectDao.insert(mProjectSale);
-            if (mProjectProgress != null)
-                mProjectDao.insert(mProjectProgress);
-            if ((mProjectService != null))
-                mProjectDao.insert(mProjectService);
+            if (mProjectSale == null)
+                mProjectSale = new Project(null, 1, "", 0f, 0f, salary.getId());
+
+            if (mProjectProgress == null)
+                mProjectProgress = new Project(null, 2, "", 0f, 0f, salary.getId());
+
+            if ((mProjectService == null))
+                mProjectService = new Project(null, 3, "", 0f, 0f, salary.getId());
+
+            mProjectDao.insert(mProjectSale);
+            mProjectDao.insert(mProjectProgress);
+            mProjectDao.insert(mProjectService);
 
             text = "添加成功";
         }

@@ -11,6 +11,7 @@ import android.widget.EditText;
 
 import org.scheming.salary.R;
 import org.scheming.salary.utils.ProjectMessage;
+import org.scheming.salary.utils.StringUtils;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -37,15 +38,15 @@ public class ProjectDialogFragment extends DialogFragment {
         View view = layoutInflater.inflate(R.layout.dialog_project, null);
 
         builder.setView(view);
-        ButterKnife.bind(view);
+        ButterKnife.bind(this, view);
 
         builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 ProjectMessage message = new ProjectMessage(getArguments().getInt("type"),
                         mName.getText().toString(),
-                        Float.valueOf(mMoney.getText().toString()),
-                        Float.valueOf(mRate.getText().toString()));
+                        StringUtils.toFloat(mMoney.getText().toString()),
+                        StringUtils.toFloat(mRate.getText().toString()));
                 EventBus.getDefault().post(message);
             }
         });
