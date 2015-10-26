@@ -1,5 +1,7 @@
 package com.scheming;
 
+import java.math.BigDecimal;
+
 import de.greenrobot.daogenerator.DaoGenerator;
 import de.greenrobot.daogenerator.Entity;
 import de.greenrobot.daogenerator.Property;
