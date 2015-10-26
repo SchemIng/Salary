@@ -33,7 +33,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="月" />
+                android:text="@string/month_string" />
 
         </TableRow>
 
@@ -60,7 +60,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="元" />
+                android:text="@string/yuan_string" />
         </TableRow>
 
         <TableRow
@@ -86,7 +86,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="元" />
+                android:text="@string/yuan_string" />
         </TableRow>
 
         <TableRow
@@ -111,7 +111,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="元" />
+                android:text="@string/yuan_string" />
         </TableRow>
 
 
@@ -139,7 +139,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="元" />
+                android:text="@string/yuan_string" />
         </TableRow>
 
         <TableRow
@@ -165,7 +165,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="元" />
+                android:text="@string/yuan_string" />
         </TableRow>
 
         <TableRow
@@ -191,7 +191,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="元" />
+                android:text="@string/yuan_string" />
         </TableRow>
 
         <TableRow
@@ -217,7 +217,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="元" />
+                android:text="@string/yuan_string" />
         </TableRow>
 
         <TableRow
@@ -243,7 +243,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="元" />
+                android:text="@string/yuan_string" />
         </TableRow>
 
         <TableRow
@@ -269,7 +269,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="元" />
+                android:text="@string/yuan_string" />
         </TableRow>
 
         <TableRow
@@ -296,7 +296,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="元" />
+                android:text="@string/yuan_string" />
         </TableRow>
 
         <TableRow
@@ -322,7 +322,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="元" />
+                android:text="@string/yuan_string" />
         </TableRow>
 
         <TableRow
@@ -348,7 +348,138 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="元" />
+                android:text="@string/yuan_string" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin">
+
+            <TextView
+                style="@style/AppTheme.NormalText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/salary_business_leave_string" />
+
+            <TextView
+                android:id="@+id/salary_business_leave_text"
+                style="@style/AppTheme.EditText"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:hint="@string/salary_click_input_string"
+                android:lines="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/salary_times_string" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin">
+
+            <TextView
+                style="@style/AppTheme.NormalText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/salary_sick_leave_string" />
+
+            <TextView
+                android:id="@+id/salary_sick_leave_text"
+                style="@style/AppTheme.EditText"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:hint="@string/salary_click_input_string"
+                android:lines="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/salary_times_string" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin">
+
+            <TextView
+                style="@style/AppTheme.NormalText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/salary_late_string" />
+
+            <TextView
+                android:id="@+id/salary_late_text"
+                style="@style/AppTheme.EditText"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:hint="@string/salary_click_input_string"
+                android:lines="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/salary_times_string" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin">
+
+            <TextView
+                style="@style/AppTheme.NormalText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/salary_leave_early_string" />
+
+            <TextView
+                android:id="@+id/salary_leave_early_text"
+                style="@style/AppTheme.EditText"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:hint="@string/salary_click_input_string"
+                android:lines="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/salary_times_string" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin">
+
+            <TextView
+                style="@style/AppTheme.NormalText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/salary_absenteeism_string" />
+
+            <TextView
+                android:id="@+id/salary_absenteeism_text"
+                style="@style/AppTheme.EditText"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:hint="@string/salary_click_input_string"
+                android:lines="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/salary_times_string" />
         </TableRow>
     </TableLayout>
 </ScrollView>

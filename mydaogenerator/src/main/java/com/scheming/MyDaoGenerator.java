@@ -43,6 +43,7 @@ public class MyDaoGenerator {
         project.addStringProperty("name");
         project.addFloatProperty("cut_rate");
         project.addFloatProperty("total_money");
+        project.addFloatProperty("result_money");
 
         //补助
         Entity allowance = schema.addEntity("Allowance");

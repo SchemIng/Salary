@@ -30,7 +30,7 @@ public class FrameRecyclerAdapter extends RecyclerView.Adapter<FrameRecyclerAdap
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.employee_recycler_item, parent, false);
         return new ViewHolder(view, clickListener);
     }
 

@@ -29,4 +29,12 @@
     <string name="dialog_project_name_string">项目名称</string>
     <string name="dialog_project_money_string">金额</string>
     <string name="dialog_project_rate_string">提成比例</string>
+    <string name="month_string">月</string>
+    <string name="yuan_string">元</string>
+    <string name="salary_business_leave_string">事假</string>
+    <string name="salary_times_string">次</string>
+    <string name="salary_sick_leave_string">病假</string>
+    <string name="salary_late_string">迟到</string>
+    <string name="salary_leave_early_string">早退</string>
+    <string name="salary_absenteeism_string">旷工</string>
 </resources>

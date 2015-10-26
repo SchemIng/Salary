@@ -1,6 +1,6 @@
 package org.scheming.salary.activity;
 
-import android.app.ProgressDialog;
+import android.app.DialogFragment;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,16 +15,21 @@ import android.widget.Toast;
 import org.scheming.salary.R;
 import org.scheming.salary.SalaryApplication;
 import org.scheming.salary.dao.AllowanceDao;
+import org.scheming.salary.dao.AttendanceDao;
 import org.scheming.salary.dao.ProjectDao;
 import org.scheming.salary.dao.SalaryDao;
 import org.scheming.salary.entity.Allowance;
+import org.scheming.salary.entity.Attendance;
 import org.scheming.salary.entity.Project;
 import org.scheming.salary.entity.Salary;
+import org.scheming.salary.fragment.NumberPickerFragment;
 import org.scheming.salary.fragment.ProjectDialogFragment;
+import org.scheming.salary.utils.AttendanceMsg;
 import org.scheming.salary.utils.ConstField;
 import org.scheming.salary.utils.Message;
 import org.scheming.salary.utils.ProjectMessage;
 import org.scheming.salary.utils.StringUtils;
+import org.scheming.salary.utils.TypeUtils;
 
 import java.util.Calendar;
 import java.util.concurrent.Callable;
@@ -32,8 +37,7 @@ import java.util.concurrent.Callable;
 import butterknife.Bind;
 import de.greenrobot.event.EventBus;
 
-public class SalaryActivity extends BaseActivity implements AdapterView.OnItemSelectedListener,
-        View.OnClickListener {
+public class SalaryActivity extends BaseActivity implements AdapterView.OnItemSelectedListener {
     @Bind(R.id.salary_month_spinner)
     Spinner mSpinner;
 
@@ -73,7 +77,22 @@ public class SalaryActivity extends BaseActivity implements AdapterView.OnItemSe
     @Bind(R.id.salary_service_text)
     TextView mServiceTV;
 
-    private ProgressDialog mProgressDialog;
+    @Bind(R.id.salary_business_leave_text)
+    TextView mBusinessTV;
+
+    @Bind(R.id.salary_sick_leave_text)
+    TextView mSickTV;
+
+    @Bind(R.id.salary_late_text)
+    TextView mLateTV;
+
+    @Bind(R.id.salary_leave_early_text)
+    TextView mEarlyTV;
+
+    @Bind(R.id.salary_absenteeism_text)
+    TextView mAbsenteeismTV;
+
+//    private ProgressDialog mProgressDialog;
 
     private String[] mSpinnerItems;
     private boolean isAddMonth = true;
@@ -82,12 +101,14 @@ public class SalaryActivity extends BaseActivity implements AdapterView.OnItemSe
     private SalaryDao mSalaryDao;
     private ProjectDao mProjectDao;
     private AllowanceDao mAllowanceDao;
+    private AttendanceDao mAttendanceDao;
 
     private Project mProjectSale;
     private Project mProjectProgress;
     private Project mProjectService;
     private Salary mCurrentSalary;
     private Allowance mAllowance;
+    private Attendance mAttendance;
 
 
     @Override
@@ -100,43 +121,33 @@ public class SalaryActivity extends BaseActivity implements AdapterView.OnItemSe
         init();
 
         if (!isAddMonth) {
-            Long mSalaryId = getIntent().getLongExtra(ConstField.SALARY_ID, 0);
-            mCurrentSalary = mSalaryDao.queryBuilder().where(
-                    SalaryDao.Properties.Id.eq(mSalaryId)).list().get(0);
-            mAllowance = mCurrentSalary.getAllowance().get(0);
-
-            for (int i = 0; i < 3; i++) {
-                if (mCurrentSalary.getProjects().size() == 0)
-                    break;
-                Project project = mCurrentSalary.getProjects().get(i);
-                switch (project.getType()) {
-                    case 1:
-                        mProjectSale = project;
-                        break;
-                    case 2:
-                        mProjectProgress = project;
-                        break;
-                    case 3:
-                        mProjectService = project;
-                        break;
-                }
-            }
-
             initWithData();
         } else
             initWithNew();
     }
 
     private void init() {
-        mProgressDialog = new ProgressDialog(this);
+//        mProgressDialog = new ProgressDialog(this);
 
-        mSaleTV.setOnClickListener(this);
-        mProgressTV.setOnClickListener(this);
-        mServiceTV.setOnClickListener(this);
+        ClickListener listener1 = new ClickListener(1);
+
+        mSaleTV.setOnClickListener(listener1);
+        mProgressTV.setOnClickListener(listener1);
+        mServiceTV.setOnClickListener(listener1);
+
+        ClickListener listener2 = new ClickListener(2);
+
+        mBusinessTV.setOnClickListener(listener2);
+        mSickTV.setOnClickListener(listener2);
+        mEarlyTV.setOnClickListener(listener2);
+        mLateTV.setOnClickListener(listener2);
+        mAbsenteeismTV.setOnClickListener(listener2);
+
 
         mSalaryDao = SalaryApplication.getApplication().getSession().getSalaryDao();
         mAllowanceDao = SalaryApplication.getApplication().getSession().getAllowanceDao();
         mProjectDao = SalaryApplication.getApplication().getSession().getProjectDao();
+        mAttendanceDao = SalaryApplication.getApplication().getSession().getAttendanceDao();
 
         mUserId = getIntent().getLongExtra(ConstField.USER_ID, 0);
         isAddMonth = getIntent().getBooleanExtra(ConstField.IS_ADD_MONTH, false);
@@ -153,6 +164,29 @@ public class SalaryActivity extends BaseActivity implements AdapterView.OnItemSe
     }
 
     private void initWithData() {
+        Long mSalaryId = getIntent().getLongExtra(ConstField.SALARY_ID, 0);
+        mCurrentSalary = mSalaryDao.queryBuilder().where(
+                SalaryDao.Properties.Id.eq(mSalaryId)).list().get(0);
+        mAllowance = mCurrentSalary.getAllowance().get(0);
+        mAttendance = mCurrentSalary.getAttendance().get(0);
+
+        for (int i = 0; i < 3; i++) {
+            if (mCurrentSalary.getProjects().size() == 0)
+                break;
+            Project project = mCurrentSalary.getProjects().get(i);
+            switch (project.getType()) {
+                case 1:
+                    mProjectSale = project;
+                    break;
+                case 2:
+                    mProjectProgress = project;
+                    break;
+                case 3:
+                    mProjectService = project;
+                    break;
+            }
+        }
+
         mSpinner.setSelection(mCurrentSalary.getCurrent_month() - 1);
         mSpinner.setEnabled(false);
 
@@ -167,7 +201,18 @@ public class SalaryActivity extends BaseActivity implements AdapterView.OnItemSe
         mPostET.setText(String.valueOf(mAllowance.getPost()));
         mSocialSecurityET.setText(String.valueOf(mAllowance.getSocial_security()));
 
+        mBusinessTV.setText(String.valueOf(mAttendance.getBusiness_leave()));
+        mSickTV.setText(String.valueOf(mAttendance.getSick_leave()));
+        mLateTV.setText(String.valueOf(mAttendance.getLate()));
+        mEarlyTV.setText(String.valueOf(mAttendance.getLeave_early()));
+        mAbsenteeismTV.setText(String.valueOf(mAttendance.getAbsenteeism()));
 
+        mSaleTV.setText(String.format("%s:%f*%f=%f", mProjectSale.getName(), mProjectSale.getTotal_money(),
+                mProjectSale.getCut_rate(), mProjectSale.getResult_money()));
+        mProgressTV.setText(String.format("%s:%f*%f=%f", mProjectProgress.getName(), mProjectProgress.getTotal_money(),
+                mProjectProgress.getCut_rate(), mProjectProgress.getResult_money()));
+        mServiceTV.setText(String.format("%s:%f*%f=%f", mProjectService.getName(), mProjectService.getTotal_money(),
+                mProjectService.getCut_rate(), mProjectService.getResult_money()));
     }
 
     private void saveData() {
@@ -187,12 +232,21 @@ public class SalaryActivity extends BaseActivity implements AdapterView.OnItemSe
                 StringUtils.toFloat(mPostET.getText().toString()),
                 salary.getId());
 
+        Attendance attendance = new Attendance(mAttendance == null ? null : mAttendance.getId(),
+                StringUtils.toInteger(mBusinessTV.getText().toString()),
+                StringUtils.toInteger(mSickTV.getText().toString()),
+                StringUtils.toInteger(mLateTV.getText().toString()),
+                StringUtils.toInteger(mEarlyTV.getText().toString()),
+                StringUtils.toInteger(mAbsenteeismTV.getText().toString()),
+                salary.getId());
+
         String text;
 
         if (!isAddMonth) {
             //update
             mSalaryDao.update(salary);
             mAllowanceDao.update(allowance);
+            mAttendanceDao.update(attendance);
             mProjectDao.update(mProjectSale);
             mProjectDao.update(mProjectProgress);
             mProjectDao.update(mProjectService);
@@ -200,17 +254,20 @@ public class SalaryActivity extends BaseActivity implements AdapterView.OnItemSe
             text = "信息更新成功";
         } else {
             //insert
-            allowance.setSalary(mSalaryDao.insert(salary));
+            long salary_id = mSalaryDao.insert(salary);
+            allowance.setSalary(salary_id);
+            attendance.setSalary(salary_id);
 
             mAllowanceDao.insert(allowance);
+            mAttendanceDao.insert(attendance);
             if (mProjectSale == null)
-                mProjectSale = new Project(null, 1, "", 0f, 0f, salary.getId());
+                mProjectSale = new Project(null, 1, "", 0f, 0f, 0f, salary.getId());
 
             if (mProjectProgress == null)
-                mProjectProgress = new Project(null, 2, "", 0f, 0f, salary.getId());
+                mProjectProgress = new Project(null, 2, "", 0f, 0f, 0f, salary.getId());
 
             if ((mProjectService == null))
-                mProjectService = new Project(null, 3, "", 0f, 0f, salary.getId());
+                mProjectService = new Project(null, 3, "", 0f, 0f, 0f, salary.getId());
 
             mProjectDao.insert(mProjectSale);
             mProjectDao.insert(mProjectProgress);
@@ -233,49 +290,64 @@ public class SalaryActivity extends BaseActivity implements AdapterView.OnItemSe
 
     }
 
-    public void onEvent(ProjectMessage msg) {
-        Project project = new Project(null, msg.type, msg.name, msg.cut_rate, msg.total_money, mCurrentSalary.getId());
-        switch (msg.type) {
-            case 1:
-                project.setId(mProjectSale == null ? null : mProjectSale.getId());
-                mProjectSale = project;
-                break;
-            case 2:
-                project.setId(mProjectProgress == null ? null : mProjectProgress.getId());
-                mProjectProgress = project;
-                break;
-            case 3:
-                project.setId(mProjectService == null ? null : mProjectService.getId());
-                mProjectService = project;
-                break;
-        }
-    }
+    class ClickListener implements View.OnClickListener {
+        private int type;
 
-    @Override
-    public void onClick(View v) {
-        ProjectDialogFragment fragment = new ProjectDialogFragment();
-        Bundle bundle = new Bundle();
-        String msg = "";
-        int type = 0;
-
-        switch (v.getId()) {
-            case R.id.salary_sale_text:
-                msg = "销售提成";
-                type = 1;
-                break;
-            case R.id.salary_progress_text:
-                msg = "实施提成";
-                type = 2;
-                break;
-            case R.id.salary_service_text:
-                msg = "服务提成";
-                type = 3;
-                break;
+        public ClickListener(int type) {
+            this.type = type;
         }
-        bundle.putInt("type", type);
-        bundle.putString("msg", msg);
-        fragment.setArguments(bundle);
-        fragment.show(getFragmentManager(), "project");
+
+        @Override
+        public void onClick(View v) {
+            Bundle bundle = new Bundle();
+            int type = 0;
+
+            if (this.type == 1) {
+                ProjectDialogFragment fragment = new ProjectDialogFragment();
+                switch (v.getId()) {
+                    case R.id.salary_sale_text:
+                        type = 1;
+                        break;
+                    case R.id.salary_progress_text:
+                        type = 2;
+                        break;
+                    case R.id.salary_service_text:
+                        type = 3;
+                        break;
+                }
+
+                bundle.putInt("type", type);
+                bundle.putString("msg", TypeUtils.toString(type, Project.class));
+                fragment.setArguments(bundle);
+                fragment.show(getFragmentManager(), "project");
+
+            } else {
+                NumberPickerFragment fragment = new NumberPickerFragment();
+                switch (v.getId()) {
+                    case R.id.salary_business_leave_text:
+                        type = 1;
+                        break;
+                    case R.id.salary_sick_leave_text:
+                        type = 2;
+                        break;
+                    case R.id.salary_late_text:
+                        type = 3;
+                        break;
+                    case R.id.salary_leave_early_text:
+                        type = 4;
+                        break;
+                    case R.id.salary_absenteeism_text:
+                        type = 5;
+                        break;
+                }
+                bundle.putInt("type", type);
+                bundle.putString("msg", TypeUtils.toString(type, Attendance.class));
+                fragment.setArguments(bundle);
+                fragment.show(getFragmentManager(), "fragment");
+            }
+
+        }
+
     }
 
     @Override
@@ -297,8 +369,8 @@ public class SalaryActivity extends BaseActivity implements AdapterView.OnItemSe
                     return true;
                 }
 
-                if (SalaryApplication.getApplication().getSession().callInTx(new SaveDataCall()))
-                    mProgressDialog.dismiss();
+                SalaryApplication.getApplication().getSession().callInTx(new SaveDataCall());
+//                    mProgressDialog.dismiss();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -317,5 +389,45 @@ public class SalaryActivity extends BaseActivity implements AdapterView.OnItemSe
             saveData();
             return true;
         }
+    }
+
+    public void onEvent(ProjectMessage msg) {
+        Project project = new Project(null, msg.type, msg.name, msg.cut_rate, msg.total_money,
+                msg.total_money * msg.cut_rate, mCurrentSalary.getId());
+        switch (msg.type) {
+            case 1:
+                project.setId(mProjectSale == null ? null : mProjectSale.getId());
+                mProjectSale = project;
+                break;
+            case 2:
+                project.setId(mProjectProgress == null ? null : mProjectProgress.getId());
+                mProjectProgress = project;
+                break;
+            case 3:
+                project.setId(mProjectService == null ? null : mProjectService.getId());
+                mProjectService = project;
+                break;
+        }
+    }
+
+    public void onEvent(AttendanceMsg msg) {
+        switch (msg.type) {
+            case 1:
+                mBusinessTV.setText(String.valueOf(msg.times));
+                break;
+            case 2:
+                mSickTV.setText(String.valueOf(msg.times));
+                break;
+            case 3:
+                mLateTV.setText(String.valueOf(msg.times));
+                break;
+            case 4:
+                mEarlyTV.setText(String.valueOf(msg.times));
+                break;
+            case 5:
+                mAbsenteeismTV.setText(String.valueOf(msg.times));
+                break;
+        }
+
     }
 }

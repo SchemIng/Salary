@@ -11,6 +11,7 @@ public class Project {
     private String name;
     private Float cut_rate;
     private Float total_money;
+    private Float result_money;
     private Long salary;
 
     public Project() {
@@ -20,12 +21,13 @@ public class Project {
         this.id = id;
     }
 
-    public Project(Long id, Integer type, String name, Float cut_rate, Float total_money, Long salary) {
+    public Project(Long id, Integer type, String name, Float cut_rate, Float total_money, Float result_money, Long salary) {
         this.id = id;
         this.type = type;
         this.name = name;
         this.cut_rate = cut_rate;
         this.total_money = total_money;
+        this.result_money = result_money;
         this.salary = salary;
     }
 
@@ -67,6 +69,14 @@ public class Project {
 
     public void setTotal_money(Float total_money) {
         this.total_money = total_money;
+    }
+
+    public Float getResult_money() {
+        return result_money;
+    }
+
+    public void setResult_money(Float result_money) {
+        this.result_money = result_money;
     }
 
     public Long getSalary() {
