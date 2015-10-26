@@ -20,6 +20,8 @@ public class Salary {
     private Float borrow;
     private Float cut_payment;
     private Float personal_social_security;
+    private Float should_pay;
+    private Float real_pay;
     private Long user;
 
     /** Used to resolve relations */
@@ -39,12 +41,14 @@ public class Salary {
         this.id = id;
     }
 
-    public Salary(Long id, Integer current_month, Float borrow, Float cut_payment, Float personal_social_security, Long user) {
+    public Salary(Long id, Integer current_month, Float borrow, Float cut_payment, Float personal_social_security, Float should_pay, Float real_pay, Long user) {
         this.id = id;
         this.current_month = current_month;
         this.borrow = borrow;
         this.cut_payment = cut_payment;
         this.personal_social_security = personal_social_security;
+        this.should_pay = should_pay;
+        this.real_pay = real_pay;
         this.user = user;
     }
 
@@ -92,6 +96,22 @@ public class Salary {
 
     public void setPersonal_social_security(Float personal_social_security) {
         this.personal_social_security = personal_social_security;
+    }
+
+    public Float getShould_pay() {
+        return should_pay;
+    }
+
+    public void setShould_pay(Float should_pay) {
+        this.should_pay = should_pay;
+    }
+
+    public Float getReal_pay() {
+        return real_pay;
+    }
+
+    public void setReal_pay(Float real_pay) {
+        this.real_pay = real_pay;
     }
 
     public Long getUser() {

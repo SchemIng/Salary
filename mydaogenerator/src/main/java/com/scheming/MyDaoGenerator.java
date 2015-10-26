@@ -36,6 +36,8 @@ public class MyDaoGenerator {
         salary.addFloatProperty("borrow");
         salary.addFloatProperty("cut_payment");
         salary.addFloatProperty("personal_social_security");
+        salary.addFloatProperty("should_pay");
+        salary.addFloatProperty("real_pay");
 
         //工程
         Entity project = schema.addEntity("Project");
