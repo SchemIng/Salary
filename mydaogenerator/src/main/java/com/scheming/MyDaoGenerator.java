@@ -1,7 +1,5 @@
 package com.scheming;
 
-import java.math.BigDecimal;
-
 import de.greenrobot.daogenerator.DaoGenerator;
 import de.greenrobot.daogenerator.Entity;
 import de.greenrobot.daogenerator.Property;
@@ -32,6 +30,7 @@ public class MyDaoGenerator {
         Entity salary = schema.addEntity("Salary");
 
         salary.addIdProperty().autoincrement();
+        salary.addIntProperty("current_year");
         salary.addIntProperty("current_month");
         salary.addFloatProperty("borrow");
         salary.addFloatProperty("cut_payment");

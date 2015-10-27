@@ -27,13 +27,14 @@ public class SalaryDao extends AbstractDao<Salary, Long> {
     */
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
-        public final static Property Current_month = new Property(1, Integer.class, "current_month", false, "CURRENT_MONTH");
-        public final static Property Borrow = new Property(2, Float.class, "borrow", false, "BORROW");
-        public final static Property Cut_payment = new Property(3, Float.class, "cut_payment", false, "CUT_PAYMENT");
-        public final static Property Personal_social_security = new Property(4, Float.class, "personal_social_security", false, "PERSONAL_SOCIAL_SECURITY");
-        public final static Property Should_pay = new Property(5, Float.class, "should_pay", false, "SHOULD_PAY");
-        public final static Property Real_pay = new Property(6, Float.class, "real_pay", false, "REAL_PAY");
-        public final static Property User = new Property(7, Long.class, "user", false, "USER");
+        public final static Property Current_year = new Property(1, Integer.class, "current_year", false, "CURRENT_YEAR");
+        public final static Property Current_month = new Property(2, Integer.class, "current_month", false, "CURRENT_MONTH");
+        public final static Property Borrow = new Property(3, Float.class, "borrow", false, "BORROW");
+        public final static Property Cut_payment = new Property(4, Float.class, "cut_payment", false, "CUT_PAYMENT");
+        public final static Property Personal_social_security = new Property(5, Float.class, "personal_social_security", false, "PERSONAL_SOCIAL_SECURITY");
+        public final static Property Should_pay = new Property(6, Float.class, "should_pay", false, "SHOULD_PAY");
+        public final static Property Real_pay = new Property(7, Float.class, "real_pay", false, "REAL_PAY");
+        public final static Property User = new Property(8, Long.class, "user", false, "USER");
     };
 
     private DaoSession daoSession;
@@ -54,13 +55,14 @@ public class SalaryDao extends AbstractDao<Salary, Long> {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"SALARY\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
-                "\"CURRENT_MONTH\" INTEGER," + // 1: current_month
-                "\"BORROW\" REAL," + // 2: borrow
-                "\"CUT_PAYMENT\" REAL," + // 3: cut_payment
-                "\"PERSONAL_SOCIAL_SECURITY\" REAL," + // 4: personal_social_security
-                "\"SHOULD_PAY\" REAL," + // 5: should_pay
-                "\"REAL_PAY\" REAL," + // 6: real_pay
-                "\"USER\" INTEGER);"); // 7: user
+                "\"CURRENT_YEAR\" INTEGER," + // 1: current_year
+                "\"CURRENT_MONTH\" INTEGER," + // 2: current_month
+                "\"BORROW\" REAL," + // 3: borrow
+                "\"CUT_PAYMENT\" REAL," + // 4: cut_payment
+                "\"PERSONAL_SOCIAL_SECURITY\" REAL," + // 5: personal_social_security
+                "\"SHOULD_PAY\" REAL," + // 6: should_pay
+                "\"REAL_PAY\" REAL," + // 7: real_pay
+                "\"USER\" INTEGER);"); // 8: user
     }
 
     /** Drops the underlying database table. */
@@ -79,39 +81,44 @@ public class SalaryDao extends AbstractDao<Salary, Long> {
             stmt.bindLong(1, id);
         }
  
+        Integer current_year = entity.getCurrent_year();
+        if (current_year != null) {
+            stmt.bindLong(2, current_year);
+        }
+ 
         Integer current_month = entity.getCurrent_month();
         if (current_month != null) {
-            stmt.bindLong(2, current_month);
+            stmt.bindLong(3, current_month);
         }
  
         Float borrow = entity.getBorrow();
         if (borrow != null) {
-            stmt.bindDouble(3, borrow);
+            stmt.bindDouble(4, borrow);
         }
  
         Float cut_payment = entity.getCut_payment();
         if (cut_payment != null) {
-            stmt.bindDouble(4, cut_payment);
+            stmt.bindDouble(5, cut_payment);
         }
  
         Float personal_social_security = entity.getPersonal_social_security();
         if (personal_social_security != null) {
-            stmt.bindDouble(5, personal_social_security);
+            stmt.bindDouble(6, personal_social_security);
         }
  
         Float should_pay = entity.getShould_pay();
         if (should_pay != null) {
-            stmt.bindDouble(6, should_pay);
+            stmt.bindDouble(7, should_pay);
         }
  
         Float real_pay = entity.getReal_pay();
         if (real_pay != null) {
-            stmt.bindDouble(7, real_pay);
+            stmt.bindDouble(8, real_pay);
         }
  
         Long user = entity.getUser();
         if (user != null) {
-            stmt.bindLong(8, user);
+            stmt.bindLong(9, user);
         }
     }
 
@@ -132,13 +139,14 @@ public class SalaryDao extends AbstractDao<Salary, Long> {
     public Salary readEntity(Cursor cursor, int offset) {
         Salary entity = new Salary( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
-            cursor.isNull(offset + 1) ? null : cursor.getInt(offset + 1), // current_month
-            cursor.isNull(offset + 2) ? null : cursor.getFloat(offset + 2), // borrow
-            cursor.isNull(offset + 3) ? null : cursor.getFloat(offset + 3), // cut_payment
-            cursor.isNull(offset + 4) ? null : cursor.getFloat(offset + 4), // personal_social_security
-            cursor.isNull(offset + 5) ? null : cursor.getFloat(offset + 5), // should_pay
-            cursor.isNull(offset + 6) ? null : cursor.getFloat(offset + 6), // real_pay
-            cursor.isNull(offset + 7) ? null : cursor.getLong(offset + 7) // user
+            cursor.isNull(offset + 1) ? null : cursor.getInt(offset + 1), // current_year
+            cursor.isNull(offset + 2) ? null : cursor.getInt(offset + 2), // current_month
+            cursor.isNull(offset + 3) ? null : cursor.getFloat(offset + 3), // borrow
+            cursor.isNull(offset + 4) ? null : cursor.getFloat(offset + 4), // cut_payment
+            cursor.isNull(offset + 5) ? null : cursor.getFloat(offset + 5), // personal_social_security
+            cursor.isNull(offset + 6) ? null : cursor.getFloat(offset + 6), // should_pay
+            cursor.isNull(offset + 7) ? null : cursor.getFloat(offset + 7), // real_pay
+            cursor.isNull(offset + 8) ? null : cursor.getLong(offset + 8) // user
         );
         return entity;
     }
@@ -147,13 +155,14 @@ public class SalaryDao extends AbstractDao<Salary, Long> {
     @Override
     public void readEntity(Cursor cursor, Salary entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
-        entity.setCurrent_month(cursor.isNull(offset + 1) ? null : cursor.getInt(offset + 1));
-        entity.setBorrow(cursor.isNull(offset + 2) ? null : cursor.getFloat(offset + 2));
-        entity.setCut_payment(cursor.isNull(offset + 3) ? null : cursor.getFloat(offset + 3));
-        entity.setPersonal_social_security(cursor.isNull(offset + 4) ? null : cursor.getFloat(offset + 4));
-        entity.setShould_pay(cursor.isNull(offset + 5) ? null : cursor.getFloat(offset + 5));
-        entity.setReal_pay(cursor.isNull(offset + 6) ? null : cursor.getFloat(offset + 6));
-        entity.setUser(cursor.isNull(offset + 7) ? null : cursor.getLong(offset + 7));
+        entity.setCurrent_year(cursor.isNull(offset + 1) ? null : cursor.getInt(offset + 1));
+        entity.setCurrent_month(cursor.isNull(offset + 2) ? null : cursor.getInt(offset + 2));
+        entity.setBorrow(cursor.isNull(offset + 3) ? null : cursor.getFloat(offset + 3));
+        entity.setCut_payment(cursor.isNull(offset + 4) ? null : cursor.getFloat(offset + 4));
+        entity.setPersonal_social_security(cursor.isNull(offset + 5) ? null : cursor.getFloat(offset + 5));
+        entity.setShould_pay(cursor.isNull(offset + 6) ? null : cursor.getFloat(offset + 6));
+        entity.setReal_pay(cursor.isNull(offset + 7) ? null : cursor.getFloat(offset + 7));
+        entity.setUser(cursor.isNull(offset + 8) ? null : cursor.getLong(offset + 8));
      }
     
     /** @inheritdoc */

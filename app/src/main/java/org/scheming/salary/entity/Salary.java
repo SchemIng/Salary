@@ -16,6 +16,7 @@ import org.scheming.salary.dao.SalaryDao;
 public class Salary {
 
     private Long id;
+    private Integer current_year;
     private Integer current_month;
     private Float borrow;
     private Float cut_payment;
@@ -41,8 +42,9 @@ public class Salary {
         this.id = id;
     }
 
-    public Salary(Long id, Integer current_month, Float borrow, Float cut_payment, Float personal_social_security, Float should_pay, Float real_pay, Long user) {
+    public Salary(Long id, Integer current_year, Integer current_month, Float borrow, Float cut_payment, Float personal_social_security, Float should_pay, Float real_pay, Long user) {
         this.id = id;
+        this.current_year = current_year;
         this.current_month = current_month;
         this.borrow = borrow;
         this.cut_payment = cut_payment;
@@ -64,6 +66,14 @@ public class Salary {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Integer getCurrent_year() {
+        return current_year;
+    }
+
+    public void setCurrent_year(Integer current_year) {
+        this.current_year = current_year;
     }
 
     public Integer getCurrent_month() {
